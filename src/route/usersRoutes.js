@@ -1,8 +1,10 @@
-import { Router} from "express";
+import { Router } from "express";
+import usersController from '../controller/usersController.js'
 
 const router = Router()
 
-router.post('/', async (req, res) => {
-    const {nome, email} = req.body
-    
-})
+router.post('/', usersController.cadastrar)
+
+router.get('/', usersController.listar)
+
+export default router

@@ -1,5 +1,5 @@
 import express, { json } from 'express'
-import usersRoutes from './src/route/usersRoutes'
+import usersRoutes from './src/route/usersRoutes.js'
 
 const server = express()
 server.use(express.json())
