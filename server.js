@@ -7,7 +7,7 @@ server.use(express.json())
 
 server.use('/usuarios', usersRoutes)
 
-//server.use('/produtos', productRoutes)
+server.use('/produtos', productRoutes)
 
 server.use('/categoria', categoryRoutes)
 
