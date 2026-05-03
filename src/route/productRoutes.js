@@ -7,4 +7,6 @@ router.post('/', productController.CadastrarProduto)
 
 router.get('/', productController.LerProduto)
 
+router.get('/:id', productController.LerProdutoPorId)
+
 export default router

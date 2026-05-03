@@ -23,4 +23,12 @@ const Listar = async()=>{
     return rows
 }
 
-export default {buscarPorNome, cadastrar, Listar}
+const productPorId = async(id)=>{
+    const {rows} = await pool.query(
+        'SELECT * FROM products WHERE id = $1',
+        [id]
+    )
+    return rows[0]
+}
+
+export default {buscarPorNome, cadastrar, Listar, productPorId}

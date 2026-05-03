@@ -20,4 +20,14 @@ const LerProduto = async(req, res)=>{
     }
 }
 
-export default {CadastrarProduto, LerProduto}
+const LerProdutoPorId = async(req, res)=>{
+    try {
+        const productId = req.params.id
+        const product = await productService.LerProdutoPorId(productId)
+        res.status(200).json(product)
+    } catch (error) {
+        res.status(400).json({mensagem: error.message})
+    }
+}
+
+export default {CadastrarProduto, LerProduto, LerProdutoPorId}

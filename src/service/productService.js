@@ -6,7 +6,7 @@ const CadastrarProduto = async(name_product, price, description, category_id)=>{
     const jaExiste = await productRepository.buscarPorNome(name_product) //Busca no banco se já existe produto com mesmo nome
     const idcategoria = await categoryRepository.listarPorId(category_id) //Busca na tabela de categoria o id pra verificar id existente
     if(!idcategoria) throw new Error("Categoria inexistente!")
-    if(jaExiste) throw new Error("Produto já cadastrado")
+    if(jaExiste) throw new Error("Produto já cadastrado!")
     return productRepository.cadastrar(name_product, price, description, category_id)
 }
 
@@ -15,4 +15,10 @@ const LerProduto = async()=>{
     return products
 }
 
-export default {CadastrarProduto, LerProduto}
+const LerProdutoPorId = async(id)=>{
+    const product = await productRepository.productPorId(id)
+    if(!product) throw new Error("Produto inexistente!")
+    return(product)
+}
+
+export default {CadastrarProduto, LerProduto, LerProdutoPorId}
