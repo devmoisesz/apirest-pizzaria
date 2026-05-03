@@ -1,6 +1,10 @@
+//Repository consulta o banco pra atender as requisições do usuário
 import pool from "../../database/db.js";
 
+//rows é um array com resultado da consulta SQL
+
 async function buscarPorEmail(email){
+    //Busca email pra verificação de email já cadastrado
     const {rows} = await pool.query(
         'SELECT email FROM users WHERE email = $1',
         [email]
@@ -8,6 +12,7 @@ async function buscarPorEmail(email){
     return rows[0]
 }
 const criar = async({nome, email}) => {
+    //Cadastrada as informações do usuário no banco, com a data de criação 
     const {rows} = await pool.query(
         'INSERT INTO users (nome, email, date_creation) VALUES ($1, $2, CURRENT_TIMESTAMP) RETURNING *',
         [nome, email]
@@ -16,6 +21,7 @@ const criar = async({nome, email}) => {
 }
 
 const listar = async() =>{
+    //Lista todos usuários cadastrados
     const {rows} = await pool.query(
         'SELECT * FROM users'
     )
@@ -23,6 +29,7 @@ const listar = async() =>{
 }
 
 const buscarPorId = async(id) =>{
+    //Lista apenas usuário requisitado pelo id
     const {rows} = await pool.query(
         'SELECT * FROM users WHERE id = $1',
         [id]
@@ -31,6 +38,7 @@ const buscarPorId = async(id) =>{
 }
 
 const editaUser = async(id, up) =>{
+    //Atualiza dados do usuário
     const {rows} = await pool.query(
         'UPDATE users SET nome = $1, email = $2 WHERE id = $3 RETURNING *',
         [up.nome, up.email, id]
@@ -39,6 +47,7 @@ const editaUser = async(id, up) =>{
 }
 
 const delect = async(id) => {
+    //Deleta Usuários
     const {rows} = await pool.query(
         'DELETE FROM users WHERE id = $1',
         [id]

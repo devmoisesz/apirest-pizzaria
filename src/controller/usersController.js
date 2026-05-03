@@ -1,3 +1,4 @@
+//Contraller faz as requisições e responde os status
 import usersService from '../service/usersService.js'
 
 const cadastrar = async(req, res) => {
@@ -22,7 +23,7 @@ const listar = async(req, res) => {
 const listarPorId = async(req, res) =>{
     try{
         const usuarioId = req.params.id
-        const usuarios = await usersService.verifiqueUser(usuarioId)
+        const usuarios = await usersService.listarPorId(usuarioId)
         res.status(200).json(usuarios)
     }catch(error){
         res.status(400).json({mensagem: error.message})
