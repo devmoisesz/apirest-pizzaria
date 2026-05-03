@@ -15,4 +15,35 @@ const criar = async(nome)=>{
     return rows[0]
 }
 
-export default {buscarPorNome, criar}
+const listar = async()=>{
+    const {rows} = await pool.query(
+        'SELECT * FROM categoria'
+    )
+    return rows
+}
+
+const listarPorId = async(id)=>{
+    const {rows} = await pool.query(
+        'SELECT * FROM categoria WHERE id = $1',
+        [id]
+    )
+    return rows[0]
+}
+
+const editar = async(id, up)=>{
+    const {rows} = await pool.query(
+        'UPDATE categoria SET nome = $1 WHERE id = $2 RETURNING *',
+        [up, id]
+    )
+    return rows[0]
+}
+
+const deletarCategoria = async(id)=>{
+    const {rows} = await pool.query(
+        'DELETE FROM categoria WHERE id = $1',
+        [id]
+    )
+    return rows[0]
+}
+
+export default {buscarPorNome, criar, listar, listarPorId, editar, deletarCategoria}
