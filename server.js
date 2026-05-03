@@ -1,5 +1,6 @@
 import express from 'express'
 import usersRoutes from './src/route/usersRoutes.js'
+import productRoutes from './src/route/productRoutes.js'
 import categoryRoutes from './src/route/categoryRoutes.js'
 
 const server = express()
