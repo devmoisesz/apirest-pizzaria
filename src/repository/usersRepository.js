@@ -19,6 +19,7 @@ const listar = async() =>{
     const {rows} = await pool.query(
         'SELECT * FROM users'
     )
+    return rows
 }
 
-export default {buscarPorEmail, criar}
+export default {buscarPorEmail, criar, listar}

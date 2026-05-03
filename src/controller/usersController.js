@@ -11,7 +11,12 @@ const cadastrar = async(req, res) => {
 }
 
 const listar = async(req, res) => {
-    const usuario = await usersService.listar()
+    try{
+        const usuarios = await usersService.listar()
+        res.status(200).json(usuarios)
+    } catch(error){
+        res.status(400).json({mensagem: error.message})
+    }
 }
 
 export default {cadastrar, listar}

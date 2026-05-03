@@ -10,4 +10,4 @@ const listar = async() => {
     return usersRepository.listar()
 }
 
-export default {cadastrar}
+export default {cadastrar, listar}
