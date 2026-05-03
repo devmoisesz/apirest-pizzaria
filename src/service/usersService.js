@@ -18,4 +18,20 @@ const verifiqueUser = async(id) =>{
     return usuario
 }
 
-export default {cadastrar, listar, verifiqueUser}
+const update = async(id, up) =>{
+    const usuario = await usersRepository.editaUser(id, up)
+    if(!usuario){
+        throw new Error('Usuário não encontrado')
+    }
+    return usuario
+}
+
+const deleteUser = async(id)=>{
+    const usuario = await usersRepository.buscarPorId(id)
+    if(!usuario){
+        throw new Error('Usuário não encontrado')
+    }
+    return usersRepository.delect(id)
+}
+
+export default {cadastrar, listar, verifiqueUser, update, deleteUser}

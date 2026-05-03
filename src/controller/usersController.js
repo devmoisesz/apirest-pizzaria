@@ -29,4 +29,25 @@ const listarPorId = async(req, res) =>{
     }
 }
 
-export default {cadastrar, listar, listarPorId}
+const editarPorId = async(req, res) =>{
+    try{
+        const usuarioId = req.params.id
+        const {nome, email} = req.body
+        const upUser = await usersService.update(usuarioId, {nome, email})
+        res.status(200).json(upUser)
+    }catch(error){
+        res.status(400).json({mensagem: error.message})
+    }
+}
+
+const deleteUser = async(req, res)=>{
+    try{
+        const usuarioId = req.params.id
+        const delUser = await usersService.deleteUser(usuarioId)
+        res.status(200).json({mensagem: 'Usuário Deletado com sucesso!'})
+    }catch(error){
+        res.status(400).json({mensagem: error.message})
+    }
+}
+
+export default {cadastrar, listar, listarPorId, editarPorId, deleteUser}

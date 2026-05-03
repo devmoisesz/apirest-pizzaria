@@ -30,4 +30,20 @@ const buscarPorId = async(id) =>{
     return rows[0]
 }
 
-export default {buscarPorEmail, criar, listar, buscarPorId}
+const editaUser = async(id, up) =>{
+    const {rows} = await pool.query(
+        'UPDATE users SET nome = $1, email = $2 WHERE id = $3 RETURNING *',
+        [up.nome, up.email, id]
+    )
+    return rows[0]
+}
+
+const delect = async(id) => {
+    const {rows} = await pool.query(
+        'DELETE FROM users WHERE id = $1',
+        [id]
+    )
+    return rows[0]
+}
+
+export default {buscarPorEmail, criar, listar, buscarPorId, editaUser, delect}
