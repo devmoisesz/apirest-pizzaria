@@ -19,4 +19,14 @@ const listar = async(req, res) => {
     }
 }
 
-export default {cadastrar, listar}
+const listarPorId = async(req, res) =>{
+    try{
+        const usuarioId = req.params.id
+        const usuarios = await usersService.verifiqueUser(usuarioId)
+        res.status(200).json(usuarios)
+    }catch(error){
+        res.status(400).json({mensagem: error.message})
+    }
+}
+
+export default {cadastrar, listar, listarPorId}

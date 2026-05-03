@@ -10,4 +10,12 @@ const listar = async() => {
     return usersRepository.listar()
 }
 
-export default {cadastrar, listar}
+const verifiqueUser = async(id) =>{
+    const usuario = await usersRepository.buscarPorId(id)
+    if(!usuario){
+        throw new Error('Usuário não encontrado')
+    }
+    return usuario
+}
+
+export default {cadastrar, listar, verifiqueUser}

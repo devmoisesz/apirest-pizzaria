@@ -22,4 +22,12 @@ const listar = async() =>{
     return rows
 }
 
-export default {buscarPorEmail, criar, listar}
+const buscarPorId = async(id) =>{
+    const {rows} = await pool.query(
+        'SELECT * FROM users WHERE id = $1',
+        [id]
+    )
+    return rows[0]
+}
+
+export default {buscarPorEmail, criar, listar, buscarPorId}

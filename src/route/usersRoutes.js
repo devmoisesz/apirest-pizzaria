@@ -7,4 +7,6 @@ router.post('/', usersController.cadastrar)
 
 router.get('/', usersController.listar)
 
+router.get('/:id', usersController.listarPorId)
+
 export default router
