@@ -17,13 +17,21 @@ API REST de uma pizzaria em desenvolvimento. Projeto em estágio inicial — mui
 │   └── db.js
 └── src/
     ├── route/
-    │   └── usersRoutes.js
+    │   ├── usersRoutes.js
+    │   ├── categoryRoutes.js
+    │   └── productRoutes.js
     ├── controllers/
-    │   └── usersController.js
+    │   ├── usersController.js
+    │   ├── categoryController.js
+    │   └── productController.js
     ├── service/
-    │   └── usersService.js
+    │   ├── usersService.js
+    │   ├── categoryService.js
+    │   └── productService.js
     └── repository/
-        └── usersRepository.js
+        ├── usersRepository.js
+        ├── categoryRepository.js
+        └── productRepository.js
 ```
 
 ## Como rodar
@@ -56,8 +64,7 @@ O servidor sobe na porta `3001`.
 | PUT | `/usuarios/:id` | Atualiza usuário |
 | DELETE | `/usuarios/:id` | Remove usuário |
 
-### Exemplo de body para POST e PUT
-
+#### Exemplo de body para POST e PUT
 ```json
 {
   "nome": "João Silva",
@@ -65,15 +72,49 @@ O servidor sobe na porta `3001`.
 }
 ```
 
-## O que falta (muita coisa)
+### Categorias `/categorias`
 
-- [ ] Autenticação JWT (login, senha, rotas protegidas)
-- [ ] Rotas de produtos
-- [ ] Rotas de categorias
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/categorias` | Lista todas as categorias |
+| GET | `/categorias/:id` | Busca categoria por ID |
+| POST | `/categorias` | Cadastra nova categoria |
+| PUT | `/categorias/:id` | Atualiza categoria |
+| DELETE | `/categorias/:id` | Remove categoria |
+
+#### Exemplo de body para POST e PUT
+```json
+{
+  "nome": "Pizzas Especiais"
+}
+```
+
+### Produtos `/produtos`
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/produtos` | Lista todos os produtos |
+| GET | `/produtos/:id` | Busca produto por ID |
+| POST | `/produtos` | Cadastra novo produto |
+| PUT | `/produtos/:id` | Atualiza produto |
+| DELETE | `/produtos/:id` | Remove produto |
+
+#### Exemplo de body para POST e PUT
+```json
+{
+  "name_product": "Calabresa Tradicional",
+  "price": 39.90,
+  "description": "Molho de tomate, queijo mussarela, calabresa fatiada e cebola",
+  "category_id": 1
+}
+```
+
+## O que falta
+
 - [ ] Rotas de pedidos
 - [ ] Rotas de endereços
+- [ ] Autenticação JWT
 - [ ] Validação de dados de entrada
-- [ ] Senha no cadastro de usuário
-- [ ] Variáveis de ambiente para porta do servidor
 - [ ] Tratamento de erros global (middleware)
 - [ ] Paginação nas listagens
+- [ ] Variáveis de ambiente para porta do servidor
