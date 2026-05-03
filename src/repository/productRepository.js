@@ -31,4 +31,28 @@ const productPorId = async(id)=>{
     return rows[0]
 }
 
-export default {buscarPorNome, cadastrar, Listar, productPorId}
+const verificar = async(id)=>{
+    const {rows} = await pool.query(
+        'SELECT * FROM products WHERE id = $1',
+        [id]
+    )
+    return rows[0]
+}
+
+const editarProduto = async(id, name_product, price, description, category_id)=>{
+    const {rows} = await pool.query(
+        'UPDATE products SET name_product = $1, price = $2, description = $3, category_id = $4 WHERE id = $5 RETURNING *',
+        [name_product, price, description, category_id, id]
+    )
+    return rows[0]
+}
+
+const deletarProduto = async(id)=>{
+    const {rows} = await pool.query(
+        'DELETE FROM products WHERE id = $1',
+        [id]
+    )
+    return rows[0]
+}
+
+export default {buscarPorNome, cadastrar, Listar, productPorId, verificar, editarProduto, deletarProduto}

@@ -30,4 +30,25 @@ const LerProdutoPorId = async(req, res)=>{
     }
 }
 
-export default {CadastrarProduto, LerProduto, LerProdutoPorId}
+const editarProduto = async(req, res)=>{
+    try {
+        const productId = req.params.id
+        const {name_product, price, description, category_id} = req.body
+        const upProduct = await productService.editarProduto(productId, name_product, price, description, category_id)
+        res.status(200).json(upProduct)
+    } catch (error) {
+        res.status(400).json({mensagem: error.message})
+    }
+}
+
+const deletarProduto = async(req, res)=>{
+    try {
+        const productId = req.params.id
+        const delproduct = await productService.deletarProduto(productId)
+        res.status(200).json({mensagem: 'Deletado com sucesso!'})
+    } catch (error) {
+        res.status(400).json({mensagem: error.message})
+    }
+}
+
+export default {CadastrarProduto, LerProduto, LerProdutoPorId, editarProduto, deletarProduto}
