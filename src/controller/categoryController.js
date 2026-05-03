@@ -1,3 +1,4 @@
+//Controller pega as requisições do servidor e responde
 import categoryService from '../service/categoryService.js'
 
 const criarCategoria = async(req, res) =>{

@@ -1,12 +1,16 @@
+//Service faz as verificações pra retornar pro controller
 import categoryRepository from '../repository/categoryRepository.js'
 
 const postcategoria = async({nome}) =>{
+    //Verifica se já tem alguma categoria com mesmo nome
     const jaExiste = await categoryRepository.buscarPorNome(nome)
     if(jaExiste) throw new Error('Categoria já cadastrada')
+    //Retorna a categoria cadastrada
     return categoryRepository.criar(nome)
 }
 
 const listar = async()=>{
+    //Retorna pro controller as lista de categoria do banco
     return categoryRepository.listar()
 }
 

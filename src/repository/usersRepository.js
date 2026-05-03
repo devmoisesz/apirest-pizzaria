@@ -1,7 +1,7 @@
 //Repository consulta o banco pra atender as requisições do usuário
 import pool from "../../database/db.js";
 
-//rows é um array com resultado da consulta SQL
+//rows é um array que guarda o resultado da consulta SQL
 
 async function buscarPorEmail(email){
     //Busca email pra verificação de email já cadastrado

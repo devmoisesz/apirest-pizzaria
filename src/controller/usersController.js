@@ -1,4 +1,4 @@
-//Contraller faz as requisições e responde os status
+//Contraller faz as requisições do servidor e responde
 import usersService from '../service/usersService.js'
 
 const cadastrar = async(req, res) => {
