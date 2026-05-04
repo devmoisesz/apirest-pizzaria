@@ -19,19 +19,23 @@ API REST de uma pizzaria em desenvolvimento. Projeto em estágio inicial — mui
     ├── route/
     │   ├── usersRoutes.js
     │   ├── categoryRoutes.js
-    │   └── productRoutes.js
+    │   ├── productRoutes.js
+    │   └── pedidosRoutes.js
     ├── controllers/
     │   ├── usersController.js
     │   ├── categoryController.js
-    │   └── productController.js
+    │   ├── productController.js
+    │   └── pedidosController.js
     ├── service/
     │   ├── usersService.js
     │   ├── categoryService.js
-    │   └── productService.js
+    │   ├── productService.js
+    │   └── pedidosService.js
     └── repository/
         ├── usersRepository.js
         ├── categoryRepository.js
-        └── productRepository.js
+        ├── productRepository.js
+        └── pedidosRepository.js
 ```
 
 ## Como rodar
@@ -109,10 +113,41 @@ O servidor sobe na porta `3001`.
 }
 ```
 
+### Pedidos `/pedidos`
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| POST | `/pedidos` | Cria um novo pedido |
+
+#### Exemplo de body para POST
+```json
+{
+  "user_id": 11,
+  "endereco_id": 2,
+  "itens": [
+    { "product_id": 1, "quantity": 2 },
+    { "product_id": 3, "quantity": 1 }
+  ]
+}
+```
+
+#### Resposta
+```json
+{
+  "id": 16,
+  "user_id": 11,
+  "status": "pendente",
+  "total": "97.80",
+  "created_at": "2026-05-04T01:42:04.600Z",
+  "endereco_id": 2
+}
+```
+
 ## O que falta
 
-- [ ] Rotas de pedidos
 - [ ] Rotas de endereços
+- [ ] GET, PUT, DELETE de pedidos
+- [ ] Atualização de status do pedido
 - [ ] Autenticação JWT
 - [ ] Validação de dados de entrada
 - [ ] Tratamento de erros global (middleware)
