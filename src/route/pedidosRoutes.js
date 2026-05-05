@@ -5,4 +5,6 @@ const router = Router()
 
 router.post('/', pedidosController.Criarpedido)
 
+router.get('/', pedidosController.listarPedidos)
+
 export default router

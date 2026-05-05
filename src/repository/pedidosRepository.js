@@ -1,6 +1,6 @@
 import pool from '../../database/db.js'
 
-const verificaUsuario = async(id)=>{
+const buscaUsuario = async(id)=>{
     const {rows} = await pool.query(
         'SELECT id FROM users WHERE id = $1',
         [id]
@@ -8,7 +8,7 @@ const verificaUsuario = async(id)=>{
     return rows[0]
 }
 
-const verificaEndereco = async (id)=>{
+const buscaEndereco = async (id)=>{
     const {rows} = await pool.query(
         'SELECT id FROM enderecos WHERE id = $1',
         [id]
@@ -16,7 +16,7 @@ const verificaEndereco = async (id)=>{
     return rows[0]
 }
 
-const verificarProduto = async (id)=>{
+const buscaProduto = async (id)=>{
     const {rows} = await pool.query(
         'SELECT * FROM products WHERE id = $1',
         [id]
@@ -44,6 +44,13 @@ async function Criarpedido(user_id, endereco_id, itens) {
     return pedidoAtualizado[0]
 }
 
+async function BuscarPedidos() {
+    const {rows} = await pool.query(
+        'SELECT * FROM pedidos JOIN order_itens ON pedidos.id = order_itens.order_id JOIN products ON order_itens.product_id = products.id'
+    )
+    return rows
+}
 
 
-export default {verificaUsuario, verificaEndereco, verificarProduto, Criarpedido}
+
+export default {buscaUsuario, buscaEndereco, buscaEndereco, Criarpedido, BuscarPedidos}

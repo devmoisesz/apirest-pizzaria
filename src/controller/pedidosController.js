@@ -10,4 +10,13 @@ async function Criarpedido(req, res) {
     }
 }
 
-export default {Criarpedido}
+async function listarPedidos(req, res) {
+        try {
+            const pedidos = await pedidosService.listarPedidos()
+            res.status(200).json(pedidos)
+        } catch (error) {
+            res.status(400).json({mensagem: error.message})
+        }
+}
+
+export default {Criarpedido, listarPedidos}
