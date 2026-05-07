@@ -8,7 +8,7 @@ async function Criarpedido(user_id, endereco_id, itens) {
 
     await Promise.all(itens.map(async (item) => {
             const produto = await pedidosRepository.buscaProduto(item.product_id)
-            if(!produto) throw new Error("Produto não Encontrado!");
+            if(!produto) throw new Error("Produto não Encontrado!")
             item.unit_price = produto.price //Adiciona o preço no item
         }))
 
@@ -19,4 +19,15 @@ async function listarPedidos() {
     return pedidosRepository.BuscarPedidos()
 }
 
-export default {Criarpedido, listarPedidos}
+async function listarPorId(id) {
+    const idpedido = await pedidosRepository.buscarId(id)
+    if(!idpedido) throw new Error("Pedido não encontrado")
+    return await pedidosRepository.buscarPedido(id)
+}
+
+async function EditarPedido(id) {
+    const idpedido = await pedidosRepository.buscarId(id)
+    if(!idpedido) throw new Error("Pedido não encontrado")
+}
+
+export default {Criarpedido, listarPedidos, listarPorId, EditarPedido}

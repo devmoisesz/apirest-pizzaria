@@ -45,12 +45,57 @@ async function Criarpedido(user_id, endereco_id, itens) {
 }
 
 async function BuscarPedidos() {
-    const {rows} = await pool.query(
-        'SELECT * FROM pedidos JOIN order_itens ON pedidos.id = order_itens.order_id JOIN products ON order_itens.product_id = products.id'
-    )
+    const {rows} = await pool.query(`
+        SELECT 
+            pedidos.id,
+            pedidos.user_id,
+            pedidos.status,
+            pedidos.total,
+            pedidos.created_at,
+            json_agg(json_build_object(
+                'product_id', order_itens.product_id,
+                'name_product', products.name_product,
+                'quantity', order_itens.quantity,
+                'unit_price', order_itens.unit_price
+            )) AS itens
+        FROM pedidos
+        JOIN order_itens ON pedidos.id = order_itens.order_id
+        JOIN products ON order_itens.product_id = products.id
+        GROUP BY pedidos.id
+`)
     return rows
 }
 
+async function buscarId(id) {
+    const {rows} = await pool.query(
+        'SELECT id FROM pedidos WHERE id = $1',
+        [id]
+    )
+    return rows[0]
+}
+
+async function buscarPedido(id) {
+    const {rows} = await pool.query(`
+    SELECT 
+        pedidos.id,
+        pedidos.user_id,
+        pedidos.status,
+        pedidos.total,
+        pedidos.created_at,
+        json_agg(json_build_object(
+            'product_id', order_itens.product_id,
+            'name_product', products.name_product,
+            'quantity', order_itens.quantity,
+            'unit_price', order_itens.unit_price
+        )) AS itens
+    FROM pedidos
+    JOIN order_itens ON pedidos.id = order_itens.order_id
+    JOIN products ON order_itens.product_id = products.id
+    WHERE pedidos.id = $1 
+    GROUP BY pedidos.id
+`,[id])
+    return rows[0]
+}
 
 
-export default {buscaUsuario, buscaEndereco, buscaEndereco, Criarpedido, BuscarPedidos}
+export default {buscaUsuario, buscaEndereco, buscaProduto, Criarpedido, BuscarPedidos, buscarId, buscarPedido}

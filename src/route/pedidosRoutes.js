@@ -7,4 +7,8 @@ router.post('/', pedidosController.Criarpedido)
 
 router.get('/', pedidosController.listarPedidos)
 
+router.get('/:id', pedidosController.listarPedidosPorId)
+
+router.get('/:id', pedidosController.EditarPedido)
+
 export default router

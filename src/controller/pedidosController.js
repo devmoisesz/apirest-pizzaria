@@ -19,4 +19,23 @@ async function listarPedidos(req, res) {
         }
 }
 
-export default {Criarpedido, listarPedidos}
+async function listarPedidosPorId(req, res) {
+    try {
+        const id = req.params.id
+        const pedido = await pedidosService.listarPorId(id)
+        res.status(200).json(pedido) 
+    } catch (error) {
+        res.status(404).json({mensagem: error.message})
+    }
+}
+
+async function EditarPedido(req, res) {
+    try {
+        const id = req.params.id
+        const peditoEditado = await pedidosService.EditarPedido(id)
+    } catch (error) {
+        res.status(404).json({mensagem: error.message})
+    }
+}
+
+export default {Criarpedido, listarPedidos, listarPedidosPorId, EditarPedido}
