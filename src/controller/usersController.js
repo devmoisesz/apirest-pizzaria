@@ -7,7 +7,7 @@ const cadastrar = async(req, res) => {
         const usuario = await usersService.cadastrar({nome, email})
         res.status(201).json(usuario)
     } catch(error){
-        res.status(400).json({mensagem: error.message})
+        res.status(409).json({mensagem: error.message})
     }
 }
 
@@ -16,7 +16,7 @@ const listar = async(req, res) => {
         const usuarios = await usersService.listar()
         res.status(200).json(usuarios)
     } catch(error){
-        res.status(400).json({mensagem: error.message})
+        res.status(404).json({mensagem: error.message})
     }
 }
 
@@ -26,7 +26,7 @@ const listarPorId = async(req, res) =>{
         const usuarios = await usersService.listarPorId(usuarioId)
         res.status(200).json(usuarios)
     }catch(error){
-        res.status(400).json({mensagem: error.message})
+        res.status(404).json({mensagem: error.message})
     }
 }
 
@@ -37,7 +37,7 @@ const editarPorId = async(req, res) =>{
         const upUser = await usersService.update(usuarioId, {nome, email})
         res.status(200).json(upUser)
     }catch(error){
-        res.status(400).json({mensagem: error.message})
+        res.status(404).json({mensagem: error.message})
     }
 }
 
@@ -47,7 +47,7 @@ const deleteUser = async(req, res)=>{
         const delUser = await usersService.deleteUser(usuarioId)
         res.status(200).json({mensagem: 'Usuário Deletado com sucesso!'})
     }catch(error){
-        res.status(400).json({mensagem: error.message})
+        res.status(404).json({mensagem: error.message})
     }
 }
 

@@ -7,7 +7,7 @@ const criarCategoria = async(req, res) =>{
         const categoria = await categoryService.postcategoria({nome})
         res.status(201).json(categoria)
     } catch (error) {
-        res.status(400).json({mensagem: error.message})
+        res.status(404).json({mensagem: error.message})
     }
 }
 
@@ -16,7 +16,7 @@ const listarCategorias = async (req, res)=>{
         const categorias = await categoryService.listar()
         res.status(200).json(categorias)
     } catch (error) {
-        res.status(400).json({mensagem: error.message})
+        res.status(404).json({mensagem: error.message})
     }
 }
 
@@ -26,7 +26,7 @@ const listarCategoriasPorId = async(req, res)=>{
         const categorias = await categoryService.listarPorId(categoriaId)
         res.status(200).json(categorias)
     } catch (error) {
-        res.status(400).json({messagem: error.message})
+        res.status(404).json({messagem: error.message})
     }
 }
 
@@ -37,7 +37,7 @@ const editar = async(req, res)=>{
         const upCategoria = await categoryService.editar(categoriaId, nome)
         res.status(200).json(upCategoria)
     } catch (error) {
-        res.status(400).json({mensagem: error.message})
+        res.status(404).json({mensagem: error.message})
     }
 }
 
@@ -47,7 +47,7 @@ const deletar = async(req, res)=>{
         const delcategoria = await categoryService.deletarCategoria(categoriaId)
         res.status(200).json({mensagem: "Deletado com sucesso"})
     }catch(error){
-        res.status(400).json({mensagem: error.message})
+        res.status(404).json({mensagem: error.message})
     }
 }
 

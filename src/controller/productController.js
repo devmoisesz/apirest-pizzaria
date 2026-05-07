@@ -8,7 +8,7 @@ const CadastrarProduto = async(req, res)=>{
         const product = await productService.CadastrarProduto(name_product, price, description, category_id)
         res.status(201).json(product)
     } catch (error) {
-        res.status(400).json({mensagem: error.message})
+        res.status(404).json({mensagem: error.message})
     }
 }
 
@@ -17,7 +17,7 @@ const LerProduto = async(req, res)=>{
         const products = await productService.LerProduto()
         res.status(200).json(products)
     } catch (error) {
-        res.status(400).json({mensagem: error.message})
+        res.status(404).json({mensagem: error.message})
     }
 }
 
@@ -29,7 +29,7 @@ const LerProdutoPorId = async(req, res)=>{
         const product = await productService.LerProdutoPorId(productId)
         res.status(200).json(product)
     } catch (error) {
-        res.status(400).json({mensagem: error.message})
+        res.status(404).json({mensagem: error.message})
     }
 }
 
@@ -42,7 +42,7 @@ const editarProduto = async(req, res)=>{
         const upProduct = await productService.editarProduto(productId, name_product, price, description, category_id)
         res.status(200).json(upProduct)
     } catch (error) {
-        res.status(400).json({mensagem: error.message})
+        res.status(404).json({mensagem: error.message})
     }
 }
 
@@ -52,7 +52,7 @@ const deletarProduto = async(req, res)=>{
         const delproduct = await productService.deletarProduto(productId)
         res.status(200).json({mensagem: 'Deletado com sucesso!'})
     } catch (error) {
-        res.status(400).json({mensagem: error.message})
+        res.status(404).json({mensagem: error.message})
     }
 }
 
