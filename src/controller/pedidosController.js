@@ -32,7 +32,9 @@ async function listarPedidosPorId(req, res) {
 async function EditarPedido(req, res) {
     try {
         const id = req.params.id
-        const peditoEditado = await pedidosService.EditarPedido(id)
+        const {status} = req.body
+        const pedidoEditado = await pedidosService.EditarPedido(id, status)
+        res.status(200).json(pedidoEditado)
     } catch (error) {
         res.status(404).json({mensagem: error.message})
     }

@@ -16,7 +16,7 @@ async function Criarpedido(user_id, endereco_id, itens) {
 }
 
 async function listarPedidos() {
-    return pedidosRepository.BuscarPedidos()
+    return await pedidosRepository.BuscarPedidos()
 }
 
 async function listarPorId(id) {
@@ -25,9 +25,10 @@ async function listarPorId(id) {
     return await pedidosRepository.buscarPedido(id)
 }
 
-async function EditarPedido(id) {
+async function EditarPedido(id, status) {
     const idpedido = await pedidosRepository.buscarId(id)
     if(!idpedido) throw new Error("Pedido não encontrado")
+    return await pedidosRepository.EditarPedido(id, status)
 }
 
 export default {Criarpedido, listarPedidos, listarPorId, EditarPedido}
