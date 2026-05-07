@@ -40,4 +40,14 @@ async function EditarPedido(req, res) {
     }
 }
 
-export default {Criarpedido, listarPedidos, listarPedidosPorId, EditarPedido}
+async function DeletarProduto(req, res) {
+    try {
+        const id = req.params.id
+        const produtoDeletado = await pedidosService.DeletarProduto(id)
+        res.status(200).json({mensagem: 'Deletado!'})
+    } catch (error) {
+        res.status(404).json({mensagem: error.message})
+    }
+}
+
+export default {Criarpedido, listarPedidos, listarPedidosPorId, EditarPedido, DeletarProduto}

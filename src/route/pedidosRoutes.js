@@ -11,4 +11,6 @@ router.get('/:id', pedidosController.listarPedidosPorId)
 
 router.put('/:id', pedidosController.EditarPedido)
 
+router.delete('/:id', pedidosController.DeletarProduto)
+
 export default router

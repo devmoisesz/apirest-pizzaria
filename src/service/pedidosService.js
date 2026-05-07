@@ -31,4 +31,10 @@ async function EditarPedido(id, status) {
     return await pedidosRepository.EditarPedido(id, status)
 }
 
-export default {Criarpedido, listarPedidos, listarPorId, EditarPedido}
+async function DeletarProduto(id) {
+    const idpedido = await pedidosRepository.buscarId(id)
+    if(!idpedido) throw new Error("Pedido não encontrado!")
+    return await pedidosRepository.DeletarProduto(id)
+}
+
+export default {Criarpedido, listarPedidos, listarPorId, EditarPedido, DeletarProduto}

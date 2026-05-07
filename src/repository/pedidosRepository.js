@@ -105,4 +105,11 @@ async function EditarPedido(id, status) {
     return rows[0]
 }
 
-export default {buscaUsuario, buscaEndereco, buscaProduto, Criarpedido, BuscarPedidos, buscarId, buscarPedido, EditarPedido}
+async function DeletarProduto(id) {
+    const {rows} = await pool.query(`
+        DELETE FROM pedidos WHERE pedidos.id = $1
+    `,[id])
+    return rows[0]
+}
+
+export default {buscaUsuario, buscaEndereco, buscaProduto, Criarpedido, BuscarPedidos, buscarId, buscarPedido, EditarPedido, DeletarProduto}
