@@ -117,7 +117,11 @@ O servidor sobe na porta `3001`.
 
 | Método | Rota | Descrição |
 |--------|------|-----------|
+| GET | `/pedidos` | Lista todos os pedidos |
+| GET | `/pedidos/:id` | Busca pedido por ID |
 | POST | `/pedidos` | Cria um novo pedido |
+| PUT | `/pedidos/:id` | Atualiza status do pedido |
+| DELETE | `/pedidos/:id` | Remove pedido |
 
 #### Exemplo de body para POST
 ```json
@@ -131,23 +135,22 @@ O servidor sobe na porta `3001`.
 }
 ```
 
-#### Resposta
+#### Exemplo de body para PUT
 ```json
 {
-  "id": 16,
-  "user_id": 11,
-  "status": "pendente",
-  "total": "97.80",
-  "created_at": "2026-05-04T01:42:04.600Z",
-  "endereco_id": 2
+  "status": "em preparo"
 }
 ```
+
+#### Status disponíveis
+- `pendente`
+- `em preparo`
+- `entregue`
+- `cancelado`
 
 ## O que falta
 
 - [ ] Rotas de endereços
-- [ ] GET, PUT, DELETE de pedidos
-- [ ] Atualização de status do pedido
 - [ ] Autenticação JWT
 - [ ] Validação de dados de entrada
 - [ ] Tratamento de erros global (middleware)
