@@ -17,9 +17,7 @@ const listar = async() => {
 const listarPorId = async(id) =>{
     //Verificar se o usuário requisitado existe no banco
     const usuario = await usersRepository.buscarPorId(id)
-    if(!usuario){
-        throw new Error('Usuário não encontrado')
-    }
+    if(!usuario) throw new Error('Usuário não encontrado')
     //Depois da Verificação, retornar o usuário requisitado
     return usuario
 }
@@ -27,9 +25,7 @@ const listarPorId = async(id) =>{
 const update = async(id, up) =>{
     //Verifica pra edição se o usuário existe no banco e atualiza as alterações no banco
     const usuario = await usersRepository.editaUser(id, up)
-    if(!usuario){
-        throw new Error('Usuário não encontrado')
-    }
+    if(!usuario) throw new Error('Usuário não encontrado')
     //Retorna usuario editado
     return usuario
 }

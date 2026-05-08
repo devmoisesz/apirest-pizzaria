@@ -7,4 +7,6 @@ router.post('/', enderecoController.CadastrarEnderecos) //Rota post pra cadastro
 
 router.get('/', enderecoController.ListarEnderecos) //Rota get pra listagem de todos os endereços cadastrados
 
+router.get('/:id', enderecoController.ListarEndereco) //Rota get pra listagem de apenas um endereço requisitado
+
 export default router

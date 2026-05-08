@@ -22,4 +22,18 @@ async function ListarEnderecos() {
     return rows
 }
 
-export default {BuscarIDdoUsuario, CadastrarEnderecos, ListarEnderecos}
+async function BuscarIDdoEndereco(id) {
+    const {rows} = await pool.query(`
+        SELECT id FROM enderecos WHERE id = $1    
+    `,[id])
+    return rows[0]
+}
+
+async function ListarEndereco(id) {
+    const {rows} = await pool.query(`
+        SELECT * FROM enderecos WHERE id = $1
+    `,[id])
+    return rows[0]
+}
+
+export default {BuscarIDdoUsuario, CadastrarEnderecos, ListarEnderecos, BuscarIDdoEndereco, ListarEndereco}

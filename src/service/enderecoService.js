@@ -11,4 +11,10 @@ async function ListarEnderecos() {
     return await enderecoRepository.ListarEnderecos()
 }
 
-export default {CadastrarEnderecos, ListarEnderecos}
+async function ListarEndereco(id) {
+    const idEndereco = await enderecoRepository.BuscarIDdoEndereco(id)
+    if(!idEndereco) throw new Error("Endereço não Encontrado!")
+    return await enderecoRepository.ListarEndereco(id)
+}
+
+export default {CadastrarEnderecos, ListarEnderecos, ListarEndereco}
