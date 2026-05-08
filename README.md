@@ -55,7 +55,7 @@ DATABASE_URL='postgresql://usuario:senha@localhost:5432/pizzaria'
 ```
 4. Inicie o servidor:
 ```bash
-node server.js
+node --watch server.js
 ```
 
 O servidor sobe na porta `3001`.
