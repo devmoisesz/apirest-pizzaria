@@ -7,6 +7,13 @@ async function BuscarIDdoUsuario(id) {
     return rows[0]
 }
 
+async function BuscarIDdoEndereco(id) {
+    const {rows} = await pool.query(`
+        SELECT id FROM enderecos WHERE id = $1    
+    `,[id])
+    return rows[0]
+}
+
 async function CadastrarEnderecos(user_id, cidade, rua, numero, bairro, complemento, cep) {
     const {rows} = await pool.query(`
         INSERT INTO enderecos(user_id, cidade, rua, numero, bairro, complemento, cep)
@@ -22,13 +29,6 @@ async function ListarEnderecos() {
     return rows
 }
 
-async function BuscarIDdoEndereco(id) {
-    const {rows} = await pool.query(`
-        SELECT id FROM enderecos WHERE id = $1    
-    `,[id])
-    return rows[0]
-}
-
 async function ListarEndereco(id) {
     const {rows} = await pool.query(`
         SELECT * FROM enderecos WHERE id = $1
@@ -36,4 +36,12 @@ async function ListarEndereco(id) {
     return rows[0]
 }
 
-export default {BuscarIDdoUsuario, CadastrarEnderecos, ListarEnderecos, BuscarIDdoEndereco, ListarEndereco}
+async function EditarEndereco(id, cidade, rua, numero, bairro, complemento, cep) {
+    const {rows} = await pool.query(`
+        UPDATE enderecos SET cidade = $1, rua = $2, numero = $3, bairro = $4, complemento = $5, cep = $6
+        WHERE id = $7 RETURNING *
+    `,[cidade, rua, numero, bairro, complemento, cep, id])
+    return rows[0]
+}
+
+export default {BuscarIDdoUsuario, CadastrarEnderecos, ListarEnderecos, BuscarIDdoEndereco, ListarEndereco, EditarEndereco}

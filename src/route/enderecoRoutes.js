@@ -9,4 +9,8 @@ router.get('/', enderecoController.ListarEnderecos) //Rota get pra listagem de t
 
 router.get('/:id', enderecoController.ListarEndereco) //Rota get pra listagem de apenas um endereço requisitado
 
+router.put('/:id', enderecoController.EditarEndereco) //Rota put pra edição de endereço cadastrado
+
+router.delete('/:id', enderecoController.DeletarEndereco) //Rota delete pra deletar endereços cadastrados
+
 export default router
