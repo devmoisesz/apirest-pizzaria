@@ -30,6 +30,17 @@ const listarPorId = async(req, res) =>{
     }
 }
 
+//Listagem do pedido do usuário
+async function PedidosDoUsuario(req, res) {
+    try {
+        const id = req.params.id
+        const PedidosDoUsuario = await usersService.PedidosDoUsuario(id)
+        res.status(200).json(PedidosDoUsuario)
+    } catch (error) {
+        res.status(404).json({mensagem: error.message})
+    }
+}
+
 const editarPorId = async(req, res) =>{
     try{
         const usuarioId = req.params.id
@@ -51,4 +62,4 @@ const deleteUser = async(req, res)=>{
     }
 }
 
-export default {cadastrar, listar, listarPorId, editarPorId, deleteUser}
+export default {cadastrar, listar, listarPorId, editarPorId, deleteUser, PedidosDoUsuario}

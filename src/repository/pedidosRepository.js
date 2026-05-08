@@ -66,6 +66,32 @@ async function BuscarPedidos() {
     return rows
 }
 
+async function PedidosDoUsuario(id) {
+    //junta a tabela pedidos onde o id do usuário for igual ao user_id do pedido
+    const {rows} = await pool.query(`
+        SELECT
+            users.id,
+            users.nome,
+            json_agg(json_build_object(
+                'user_id', pedidos.user_id,
+                'status', pedidos.status,
+                'total', pedidos.total,
+                'endereco_id', pedidos.endereco_id,
+                'product_id', order_itens.product_id,
+                'name_product', products.name_product,
+                'quantity', order_itens.quantity,
+                'unit_price', order_itens.unit_price
+            )) AS pedido
+        FROM users
+        JOIN pedidos ON users.id = pedidos.user_id
+        JOIN order_itens ON pedidos.id = order_itens.order_id
+        JOIN products ON order_itens.product_id = products.id
+        WHERE pedidos.user_id = $1
+        GROUP BY users.id
+    `,[id])
+    return rows
+}
+
 async function buscarId(id) {
     const {rows} = await pool.query(
         'SELECT id FROM pedidos WHERE id = $1',
@@ -112,4 +138,4 @@ async function DeletarProduto(id) {
     return rows[0]
 }
 
-export default {buscaUsuario, buscaEndereco, buscaProduto, Criarpedido, BuscarPedidos, buscarId, buscarPedido, EditarPedido, DeletarProduto}
+export default {buscaUsuario, buscaEndereco, buscaProduto, Criarpedido, BuscarPedidos, buscarId, buscarPedido, EditarPedido, DeletarProduto, PedidosDoUsuario}

@@ -1,5 +1,7 @@
 //Service faz as verificações
+
 import usersRepository from '../repository/usersRepository.js'
+import pedidosRepository from '../repository/pedidosRepository.js'
 
 const cadastrar = async ({nome, email}) => {
     //Verificar se o email requisitado já foi cadastrado
@@ -22,6 +24,16 @@ const listarPorId = async(id) =>{
     return usuario
 }
 
+async function PedidosDoUsuario(id) {
+    //Verificar se o usuário requisitado existe no banco
+    const usuario = await usersRepository.buscarPorId(id)
+    if(!usuario) throw new Error('Usuário não encontrado')
+    const pedidos = await pedidosRepository.PedidosDoUsuario(id)
+    //verificar se o usuário requisitado tem pedidos cadastrados
+    if(!pedidos || pedidos.length === 0) throw new Error("Usuário sem pedidos")
+    return pedidos
+}
+
 const update = async(id, up) =>{
     //Verifica pra edição se o usuário existe no banco e atualiza as alterações no banco
     const usuario = await usersRepository.editaUser(id, up)
@@ -40,4 +52,4 @@ const deleteUser = async(id)=>{
     return usersRepository.delect(id)
 }
 
-export default {cadastrar, listar, listarPorId, update, deleteUser}
+export default {cadastrar, listar, listarPorId, update, deleteUser, PedidosDoUsuario}
