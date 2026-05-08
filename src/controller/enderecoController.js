@@ -45,5 +45,15 @@ async function EditarEndereco(req, res) {
     }
 }
 
+async function DeletarEndereco(req, res) {
+    try {
+        const id = req.params.id
+        const deletar = enderecoService.DeletarEndereco(id)
+        res.status(200).json({mensagem: 'Deletado com sucesso!'})
+    } catch (error) {
+        res.status(404).json({mensagem: error.message})
+    }
+}
+
 //exportação das funções
-export default {CadastrarEnderecos, ListarEnderecos, ListarEndereco, EditarEndereco}
+export default {CadastrarEnderecos, ListarEnderecos, ListarEndereco, EditarEndereco, DeletarEndereco}

@@ -44,4 +44,11 @@ async function EditarEndereco(id, cidade, rua, numero, bairro, complemento, cep)
     return rows[0]
 }
 
-export default {BuscarIDdoUsuario, CadastrarEnderecos, ListarEnderecos, BuscarIDdoEndereco, ListarEndereco, EditarEndereco}
+async function DeletarEndereco(id) {
+    const {rows} = await pool.query(`
+        DELETE FROM enderecos WHERE id = $1
+    `,[id])
+    return rows[0]
+}
+
+export default {BuscarIDdoUsuario, CadastrarEnderecos, ListarEnderecos, BuscarIDdoEndereco, ListarEndereco, EditarEndereco, DeletarEndereco}

@@ -23,4 +23,10 @@ async function EditarEndereco(id, cidade, rua, numero, bairro, complemento, cep)
     return await enderecoRepository.EditarEndereco(id, cidade, rua, numero, bairro, complemento, cep)
 }
 
-export default {CadastrarEnderecos, ListarEnderecos, ListarEndereco, EditarEndereco}
+async function DeletarEndereco(id) {
+    const idEndereco = await enderecoRepository.BuscarIDdoEndereco(id)
+    if(!idEndereco) throw new Error("Endereço não Encontrado!")
+    return await enderecoRepository.DeletarEndereco(id)
+}
+
+export default {CadastrarEnderecos, ListarEnderecos, ListarEndereco, EditarEndereco, DeletarEndereco}
