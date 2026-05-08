@@ -16,7 +16,7 @@ server.use('/categoria', categoryRoutes) // Rotas de Categoria
 
 server.use('/pedidos', pedidosRoutes) // Rotas de Pedidos
 
-server.use('/pedidos', enderecoRoutes) // Rotas de Endereços
+server.use('/enderecos', enderecoRoutes) // Rotas de Endereços
 
 server.listen(3001, () => {
     console.log('Server running on port 3001')
