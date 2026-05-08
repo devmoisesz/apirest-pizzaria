@@ -5,4 +5,6 @@ const router = Router()
 
 router.post('/', enderecoController.CadastrarEnderecos) //Rota post pra cadastros de endereços
 
+router.get('/', enderecoController.ListarEnderecos) //Rota get pra listagem de todos os endereços cadastrados
+
 export default router

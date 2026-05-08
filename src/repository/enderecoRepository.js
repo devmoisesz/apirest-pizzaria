@@ -15,5 +15,11 @@ async function CadastrarEnderecos(user_id, cidade, rua, numero, bairro, compleme
     return rows[0]
 }
 
+async function ListarEnderecos() {
+    const {rows} = await pool.query(`
+        SELECT * FROM enderecos
+    `)
+    return rows
+}
 
-export default {BuscarIDdoUsuario, CadastrarEnderecos}
+export default {BuscarIDdoUsuario, CadastrarEnderecos, ListarEnderecos}

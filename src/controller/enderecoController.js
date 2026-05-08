@@ -15,5 +15,14 @@ async function CadastrarEnderecos(req, res) {
     }
 }
 
+async function ListarEnderecos(req, res) {
+    try {
+        const enderecos = await enderecoService.ListarEnderecos()
+        res.status(200).json(enderecos)
+    } catch (error) {
+        res.status(404).json({mensagem: error.message})
+    }
+}
+
 //exportação das funções
-export default {CadastrarEnderecos}
+export default {CadastrarEnderecos, ListarEnderecos}

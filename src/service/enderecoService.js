@@ -7,4 +7,8 @@ async function CadastrarEnderecos(user_id, cidade, rua, numero, bairro, compleme
     return await enderecoRepository.CadastrarEnderecos(user_id, cidade, rua, numero, bairro, complemento, cep)
 }
 
-export default {CadastrarEnderecos}
+async function ListarEnderecos() {
+    return await enderecoRepository.ListarEnderecos()
+}
+
+export default {CadastrarEnderecos, ListarEnderecos}
