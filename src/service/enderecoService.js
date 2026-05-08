@@ -1,0 +1,1 @@
+import enderecoRepository from '../repository/enderecoRepository.js'
