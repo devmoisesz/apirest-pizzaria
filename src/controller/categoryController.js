@@ -51,4 +51,14 @@ const deletar = async(req, res)=>{
     }
 }
 
-export default {criarCategoria, listarCategorias, listarCategoriasPorId, editar, deletar}
+async function ProdutoDaCategoria(req, res) {
+    try {
+        const id = req.params.id
+        const ProdutoDaCategoria = await categoryService.ProdutoDaCategoria(id)
+        res.status(200).json(ProdutoDaCategoria)
+    } catch (error) {
+        res.status(404).json({mensagem: error.message})
+    }
+}
+
+export default {criarCategoria, listarCategorias, listarCategoriasPorId, editar, deletar, ProdutoDaCategoria}
