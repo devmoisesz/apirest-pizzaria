@@ -4,7 +4,7 @@ const schema = z.object({
     name_product: z.string().min(3),
     price: z.number().positive(),
     description: z.string().min(4),
-    category_id: z.int()
+    category_id: z.number().int()
 })
 
 function ValidarCadastro (req, res, next){
@@ -13,8 +13,8 @@ function ValidarCadastro (req, res, next){
     if(!cadastro.success){
         return res.status(400).json({
             erros: cadastro.error.issues.map(issue => ({
-                campo: issue.path[0],
-                mensagem: issue.message
+                campo: issue.path[0], //nome do campo que falhou
+                mensagem: issue.message //descrição do erro
             }))
         })
     }

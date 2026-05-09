@@ -16,8 +16,8 @@ function ValidarCadastro(req, res, next){
         //map pra simplificar o erro
         return res.status(400).json({
             erros: resultado.error.issues.map(issue => ({
-                campo: issue.path[0],
-                mensagem: issue.message
+                campo: issue.path[0], //nome do campo que falhou
+                mensagem: issue.message // descrição do erro
             }))
         })
     }
