@@ -193,7 +193,6 @@ O servidor sobe na porta `3001`.
 ## O que falta
 
 - [ ] Autenticação JWT
-- [ ] Validação de dados de entrada
 - [ ] Tratamento de erros global (middleware)
 - [ ] Paginação nas listagens
 - [ ] Variáveis de ambiente para porta do servidor
