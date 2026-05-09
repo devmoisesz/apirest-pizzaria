@@ -69,6 +69,7 @@ O servidor sobe na porta `3001`.
 | GET | `/usuarios` | Lista todos os usuários |
 | GET | `/usuarios/:id` | Busca usuário por ID |
 | GET | `/usuarios/:id/pedidos` | Lista pedidos de um usuário |
+| GET | `/usuarios/:id/enderecos` | Lista endereços de um usuário |
 | POST | `/usuarios` | Cadastra novo usuário |
 | PUT | `/usuarios/:id` | Atualiza usuário |
 | DELETE | `/usuarios/:id` | Remove usuário |
@@ -191,7 +192,6 @@ O servidor sobe na porta `3001`.
 
 ## O que falta
 
-- [ ] Cancelamento de pedido com validação de status
 - [ ] Autenticação JWT
 - [ ] Validação de dados de entrada
 - [ ] Tratamento de erros global (middleware)
