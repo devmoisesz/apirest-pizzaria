@@ -14,8 +14,8 @@ function ValidarCadastro(req, res, next){
                 mensagem: issue.message
             }))
         })
-        next()
     }
+    next()
 }
 
 export default {ValidarCadastro}
