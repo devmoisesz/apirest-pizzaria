@@ -1,9 +1,10 @@
 import { Router } from "express";
 import categoryController from '../controller/categoryController.js'
+import categoryMiddleware from '../middlewares/categoryMiddleware.js'
 
 const router = Router()
 
-router.post('/', categoryController.criarCategoria) //Rota pra cadastro de categorias
+router.post('/',categoryMiddleware.VerificarCadastro, categoryController.criarCategoria) //Rota pra validar e cadastro de categorias
 
 router.get('/', categoryController.listarCategorias) //Rota pra ler todas categorias cadastradas
 
