@@ -49,8 +49,13 @@ async function BuscarPedidos() {
         SELECT 
             pedidos.id,
             pedidos.user_id,
+            users.nome,
+            users.email,
             pedidos.status,
             pedidos.total,
+            enderecos.rua,
+            enderecos.bairro,
+            enderecos.cidade,
             pedidos.created_at,
             json_agg(json_build_object(
                 'product_id', order_itens.product_id,
@@ -59,9 +64,11 @@ async function BuscarPedidos() {
                 'unit_price', order_itens.unit_price
             )) AS itens
         FROM pedidos
+        JOIN users ON pedidos.user_id = users.id
         JOIN order_itens ON pedidos.id = order_itens.order_id
         JOIN products ON order_itens.product_id = products.id
-        GROUP BY pedidos.id
+        JOIN enderecos ON pedidos.endereco_id = enderecos.id 
+        GROUP BY pedidos.id, users.nome, users.email, enderecos.rua, enderecos.bairro, enderecos.cidade
     `)
     return rows
 }
@@ -105,8 +112,13 @@ async function buscarPedido(id) {
         SELECT 
             pedidos.id,
             pedidos.user_id,
+            users.nome,
+            users.email,
             pedidos.status,
             pedidos.total,
+            enderecos.rua,
+            enderecos.bairro,
+            enderecos.cidade,
             pedidos.created_at,
             json_agg(json_build_object(
                 'product_id', order_itens.product_id,
@@ -115,10 +127,12 @@ async function buscarPedido(id) {
                 'unit_price', order_itens.unit_price
             )) AS itens
         FROM pedidos
+        JOIN users ON pedidos.user_id = users.id
         JOIN order_itens ON pedidos.id = order_itens.order_id
         JOIN products ON order_itens.product_id = products.id
+        JOIN enderecos ON pedidos.endereco_id = enderecos.id 
         WHERE pedidos.id = $1 
-        GROUP BY pedidos.id
+        GROUP BY pedidos.id, users.nome, users.email, enderecos.rua, enderecos.bairro, enderecos.cidade
     `,[id])
     return rows[0]
 }
