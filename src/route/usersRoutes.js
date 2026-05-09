@@ -1,9 +1,10 @@
 import { Router } from "express";
 import usersController from '../controller/usersController.js'
+import usersMiddleware from '../middlewares/usersMiddleware.js'
 
 const router = Router()
 
-router.post('/', usersController.cadastrar) //Rota pra cadastro de usuários
+router.post('/', usersMiddleware.ValidarCadastro, usersController.cadastrar) //Rota pra validar e cadastro de usuários
 
 router.get('/', usersController.listar) //Rota pra Listar todos usuários cadastrados
 
