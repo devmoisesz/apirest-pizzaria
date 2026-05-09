@@ -34,6 +34,8 @@ async function EditarPedido(id, status) {
 async function DeletarProduto(id) {
     const idpedido = await pedidosRepository.buscarId(id)
     if(!idpedido) throw new Error("Pedido não encontrado!")
+    const statusCancelamento = await pedidosRepository.statusPendente(id)
+    if(statusCancelamento.status !== "pendente") throw new Error("Não é possível cancelar um pedido que não esteja pendente.")
     return await pedidosRepository.DeletarProduto(id)
 }
 

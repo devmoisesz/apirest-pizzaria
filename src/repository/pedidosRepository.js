@@ -138,4 +138,12 @@ async function DeletarProduto(id) {
     return rows[0]
 }
 
-export default {buscaUsuario, buscaEndereco, buscaProduto, Criarpedido, BuscarPedidos, buscarId, buscarPedido, EditarPedido, DeletarProduto, PedidosDoUsuario}
+async function statusPendente(id) {
+    const {rows} = await pool.query(`
+        SELECT pedidos.status FROM pedidos
+        WHERE pedidos.id = $1    
+    `,[id])
+    return rows[0]
+}
+
+export default {buscaUsuario, buscaEndereco, buscaProduto, Criarpedido, BuscarPedidos, buscarId, buscarPedido, EditarPedido, DeletarProduto, statusPendente, PedidosDoUsuario}
