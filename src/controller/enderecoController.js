@@ -1,6 +1,6 @@
 import enderecoService from '../service/enderecoService.js'
 
-async function CadastrarEnderecos(req, res) {
+async function CadastrarEnderecos(req, res, next) {
     try {
         const {user_id, cidade, rua, numero, bairro, complemento, cep} = req.body //request nos dados preenchidos no body
         const endereco = await enderecoService.
@@ -11,47 +11,47 @@ async function CadastrarEnderecos(req, res) {
         res.status(201).json(endereco)
     } catch (error) {
         //status recurso não encontrado
-        res.status(404).json({mensagem: error.message})
+        next(error)
     }
 }
 
-async function ListarEnderecos(req, res) {
+async function ListarEnderecos(req, res, next) {
     try {
         const enderecos = await enderecoService.ListarEnderecos()
         res.status(200).json(enderecos)
     } catch (error) {
-        res.status(404).json({mensagem: error.message})
+        next(error)
     }
 }
 
-async function ListarEndereco(req, res) {
+async function ListarEndereco(req, res, next) {
     try {
         const id = req.params.id
         const endereco = await enderecoService.ListarEndereco(id)
         res.status(200).json(endereco)
     } catch (error) {
-        res.status(404).json({mensagem: error.message})
+        next(error)
     }
 }
 
-async function EditarEndereco(req, res) {
+async function EditarEndereco(req, res, next) {
     try {
         const id = req.params.id
         const {cidade, rua, numero, bairro, completo, cep} = req.body
         const upEndereco = await enderecoService.EditarEndereco(id, cidade, rua, numero, bairro, completo, cep)
         res.status(200).json(upEndereco)
     } catch (error) {
-        res.status(404).json({mensagem: error.message})
+        next(error)
     }
 }
 
-async function DeletarEndereco(req, res) {
+async function DeletarEndereco(req, res, next) {
     try {
         const id = req.params.id
         const deletar = enderecoService.DeletarEndereco(id)
         res.status(200).json({mensagem: 'Deletado com sucesso!'})
     } catch (error) {
-        res.status(404).json({mensagem: error.message})
+        next(error)
     }
 }
 

@@ -1,6 +1,6 @@
 import productService from '../service/productService.js'
 
-const CadastrarProduto = async(req, res)=>{
+const CadastrarProduto = async(req, res, next)=>{
     try {
         //Pega as informações do produto direto do body
         const {name_product, price, description, category_id} = req.body
@@ -8,20 +8,20 @@ const CadastrarProduto = async(req, res)=>{
         const product = await productService.CadastrarProduto(name_product, price, description, category_id)
         res.status(201).json(product)
     } catch (error) {
-        res.status(404).json({mensagem: error.message})
+        next(error)
     }
 }
 
-const LerProduto = async(req, res)=>{
+const LerProduto = async(req, res, next)=>{
     try {
         const products = await productService.LerProduto()
         res.status(200).json(products)
     } catch (error) {
-        res.status(404).json({mensagem: error.message})
+        next(error)
     }
 }
 
-const LerProdutoPorId = async(req, res)=>{
+const LerProdutoPorId = async(req, res, next)=>{
     try {
         //Pega o parametro do id requisitado
         const productId = req.params.id
@@ -29,11 +29,11 @@ const LerProdutoPorId = async(req, res)=>{
         const product = await productService.LerProdutoPorId(productId)
         res.status(200).json(product)
     } catch (error) {
-        res.status(404).json({mensagem: error.message})
+        next(error)
     }
 }
 
-const editarProduto = async(req, res)=>{
+const editarProduto = async(req, res, next)=>{
     try {
         //Pega o parametro do id requisitado
         const productId = req.params.id
@@ -42,17 +42,17 @@ const editarProduto = async(req, res)=>{
         const upProduct = await productService.editarProduto(productId, name_product, price, description, category_id)
         res.status(200).json(upProduct)
     } catch (error) {
-        res.status(404).json({mensagem: error.message})
+        next(error)
     }
 }
 
-const deletarProduto = async(req, res)=>{
+const deletarProduto = async(req, res, next)=>{
     try {
         const productId = req.params.id
         const delproduct = await productService.deletarProduto(productId)
         res.status(200).json({mensagem: 'Deletado com sucesso!'})
     } catch (error) {
-        res.status(404).json({mensagem: error.message})
+        next(error)
     }
 }
 
