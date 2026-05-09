@@ -3,8 +3,8 @@ import { z } from 'zod'
 
 //Schema define o formato esperado do body
 const schema = z.object({
-    nome: z.string().min(3),
-    email: z.string().email()
+    nome: z.string('Valor inválido. O campo nome deve conter texto.').min(3, 'Valor inválido. Nome deve ter no mínimo 3 caracteres.'),
+    email: z.string('Valor inválido. O campo email deve conter texto.').email('Valor inválido. Email inválido.')
 })
 
 function ValidarCadastro(req, res, next){

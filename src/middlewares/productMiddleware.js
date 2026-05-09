@@ -1,9 +1,9 @@
 import { z } from 'zod'
 
 const schema = z.object({
-    name_product: z.string().min(3),
-    price: z.number().positive(),
-    description: z.string().min(4),
+    name_product: z.string('Valor inválido. O campo nome deve conter texto.').min(3, 'Valor inválido. O campo nome deve ter no mínimo 3 caracteres.'),
+    price: z.number('Valor inválido. O campo preço deve conter número').positive('Valor inválido. O campo preço deve conter número positivo.').min(0.1),
+    description: z.string('Valor inválido. O campo descrição deve conter texto.').min(4, 'Valor inválido. O campo descrição deve ter no mínimo 4 caracteres'),
     category_id: z.number().int()
 })
 

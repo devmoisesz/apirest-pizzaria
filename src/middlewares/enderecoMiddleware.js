@@ -2,12 +2,12 @@ import { z } from 'zod'
 
 const schema = z.object({
     user_id: z.number().int(),
-    cidade: z.string().min(3).max(40),
-    rua: z.string().max(40),
-    numero: z.string().max(10),
-    bairro: z.string().max(40),
-    complemento: z.string().max(30).optional(),
-    cep: z.string().min(9).max(9)
+    cidade: z.string('Valor inválido. O campo cidade deve conter texto.').min(3).max(40),
+    rua: z.string('Valor inválido. O campo rua deve conter texto.').max(40),
+    numero: z.string('Valor inválido. O campo número deve conter texto.').max(10),
+    bairro: z.string('Valor inválido. O campo bairro deve conter texto.').max(40),
+    complemento: z.string('Valor inválido. O campo complemento deve conter texto.').max(30).optional(),
+    cep: z.string('Valor inválido. O campo cep deve conter texto.').min(9).max(9)
 })
 
 function VerificarCadastro(req, res, next){

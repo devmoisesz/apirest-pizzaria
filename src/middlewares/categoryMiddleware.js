@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 const schema = z.object({
-    nome: z.string().max(50)
+    nome: z.string('Valor inválido. O campo nome deve conter texto.').max(50)
 })
 
 function VerificarCadastro(req, res, next){
