@@ -34,6 +34,14 @@ async function PedidosDoUsuario(id) {
     return pedidos
 }
 
+async function EnderecoDoUsuario(id) {
+    const usuario = await usersRepository.buscarPorId(id)
+    if(!usuario) throw new Error('Usuário não encontrado')
+    const endereco = await usersRepository.EnderecoDoUsuario(id)
+    if(!endereco || endereco.length === 0) throw new Error("Usuário sem endereço cadastrado")
+    return endereco
+}
+
 const update = async(id, up) =>{
     //Verifica pra edição se o usuário existe no banco e atualiza as alterações no banco
     const usuario = await usersRepository.editaUser(id, up)
@@ -52,4 +60,4 @@ const deleteUser = async(id)=>{
     return usersRepository.delect(id)
 }
 
-export default {cadastrar, listar, listarPorId, update, deleteUser, PedidosDoUsuario}
+export default {cadastrar, listar, listarPorId, update, deleteUser, PedidosDoUsuario, EnderecoDoUsuario}

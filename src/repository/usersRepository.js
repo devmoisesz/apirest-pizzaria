@@ -37,6 +37,27 @@ const buscarPorId = async(id) =>{
     return rows[0]
 }
 
+async function EnderecoDoUsuario(id) {
+    const {rows} = await pool.query(`
+        SELECT
+            users.id,
+            users.nome,
+            json_agg(json_build_object(
+                'cidade', enderecos.cidade,
+                'rua', enderecos.rua,
+                'numero', enderecos.numero,
+                'bairro', enderecos.bairro,
+                'complemento', enderecos.complemento,
+                'cep', enderecos.cep
+            )) AS endereço
+        FROM users
+        JOIN enderecos ON users.id = enderecos.user_id
+        WHERE users.id = $1
+        GROUP BY users.id
+    `,[id])
+    return rows[0]
+}
+
 const editaUser = async(id, up) =>{
     //Atualiza dados do usuário
     const {rows} = await pool.query(
@@ -55,4 +76,4 @@ const delect = async(id) => {
     return rows[0]
 }
 
-export default {buscarPorEmail, criar, listar, buscarPorId, editaUser, delect}
+export default {buscarPorEmail, criar, listar, buscarPorId, EnderecoDoUsuario, editaUser, delect}

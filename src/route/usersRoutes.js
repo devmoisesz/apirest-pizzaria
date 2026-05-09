@@ -11,6 +11,8 @@ router.get('/:id', usersController.listarPorId) //Rota pra Listar apenas usuári
 
 router.get('/:id/pedidos', usersController.PedidosDoUsuario) //Rota pra Listar os Pedidos do Usuário
 
+router.get('/:id/enderecos', usersController.EnderecoDoUsuario) //Rota pra Listar o Endereço do Usuário
+
 router.put('/:id', usersController.editarPorId) //Rota pra editar dados do usuário
 
 router.delete('/:id', usersController.deleteUser) //Rota pra deletar usuário
