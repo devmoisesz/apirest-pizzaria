@@ -87,7 +87,7 @@ O servidor sobe na porta `3001`.
 |--------|------|-----------|
 | GET | `/categorias` | Lista todas as categorias |
 | GET | `/categorias/:id` | Busca categoria por ID |
-| GET | `/categorias/:id` | Lista produtos de uma categoria |
+| GET | `/categorias/:id/produtos` | Lista produtos de uma categoria |
 | POST | `/categorias` | Cadastra nova categoria |
 | PUT | `/categorias/:id` | Atualiza categoria |
 | DELETE | `/categorias/:id` | Remove categoria |
