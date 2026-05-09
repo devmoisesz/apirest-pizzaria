@@ -145,7 +145,7 @@ async function EditarPedido(id, status) {
     return rows[0]
 }
 
-async function DeletarProduto(id) {
+async function DeletarPedido(id) {
     const {rows} = await pool.query(`
         DELETE FROM pedidos WHERE pedidos.id = $1
     `,[id])
@@ -160,4 +160,4 @@ async function statusPendente(id) {
     return rows[0]
 }
 
-export default {buscaUsuario, buscaEndereco, buscaProduto, Criarpedido, BuscarPedidos, buscarId, buscarPedido, EditarPedido, DeletarProduto, statusPendente, PedidosDoUsuario}
+export default {buscaUsuario, buscaEndereco, buscaProduto, Criarpedido, BuscarPedidos, buscarId, buscarPedido, EditarPedido, DeletarPedido, statusPendente, PedidosDoUsuario}

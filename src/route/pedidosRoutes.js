@@ -12,6 +12,6 @@ router.get('/:id', pedidosController.listarPedidosPorId) //Rota pra listar apena
 
 router.put('/:id', pedidosController.EditarPedido) //Rota pra editar apenas o pedido requisitado pelo id
 
-router.delete('/:id', pedidosController.DeletarProduto) //Rota pra deletar apenas o pedido requisitado pelo id
+router.delete('/:id', pedidosController.DeletarPedido) //Rota pra deletar apenas o pedido requisitado pelo id
 
 export default router

@@ -31,12 +31,12 @@ async function EditarPedido(id, status) {
     return await pedidosRepository.EditarPedido(id, status)
 }
 
-async function DeletarProduto(id) {
+async function DeletarPedido(id) {
     const idpedido = await pedidosRepository.buscarId(id)
     if(!idpedido) throw new Error("Pedido não encontrado!")
     const statusCancelamento = await pedidosRepository.statusPendente(id)
     if(statusCancelamento.status !== "pendente") throw new Error("Não é possível cancelar um pedido que não esteja pendente.")
-    return await pedidosRepository.DeletarProduto(id)
+    return await pedidosRepository.DeletarPedido(id)
 }
 
-export default {Criarpedido, listarPedidos, listarPorId, EditarPedido, DeletarProduto}
+export default {Criarpedido, listarPedidos, listarPorId, EditarPedido, DeletarPedido}
