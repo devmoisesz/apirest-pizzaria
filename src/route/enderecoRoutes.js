@@ -1,9 +1,10 @@
 import { Router } from 'express'
 import enderecoController from '../controller/enderecoController.js'
+import enderecoMiddleware from '../middlewares/enderecoMiddleware.js'
 
 const router = Router()
 
-router.post('/', enderecoController.CadastrarEnderecos) //Rota pra validar e cadastros de endereços
+router.post('/', enderecoMiddleware.VerificarCadastro, enderecoController.CadastrarEnderecos) //Rota pra validar e cadastros de endereços
 
 router.get('/', enderecoController.ListarEnderecos) //Rota pra listagem de todos os endereços cadastrados
 
