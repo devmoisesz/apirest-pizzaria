@@ -2,13 +2,15 @@
 
 import usersRepository from '../repository/usersRepository.js'
 import pedidosRepository from '../repository/pedidosRepository.js'
+import bcrypt from 'bcryptjs'
 
-const cadastrar = async ({nome, email}) => {
+const cadastrar = async ({nome, email, senha}) => {
     //Verificar se o email requisitado já foi cadastrado
     const jaExiste = await usersRepository.buscarPorEmail(email)
     if(jaExiste) throw new Error('Email já cadastrado')
+    const hash = await bcrypt.hash(senha, 10)
     //Retornar o cadastro feito
-    return usersRepository.criar({nome, email})
+    return usersRepository.criar({nome, email, senha})
 }
 
 const listar = async() => {

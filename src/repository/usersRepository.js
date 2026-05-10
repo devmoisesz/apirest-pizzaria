@@ -11,11 +11,11 @@ async function buscarPorEmail(email){
     )
     return rows[0]
 }
-const criar = async({nome, email}) => {
+const criar = async({nome, email, senha}) => {
     //Cadastrada as informações do usuário no banco, com a data de criação 
     const {rows} = await pool.query(
-        'INSERT INTO users (nome, email, date_creation) VALUES ($1, $2, CURRENT_TIMESTAMP) RETURNING *',
-        [nome, email]
+        'INSERT INTO users (nome, email, senha, date_creation) VALUES ($1, $2, $3, CURRENT_TIMESTAMP) RETURNING id, nome, email, date_creation',
+        [nome, email, senha]
     )
     return rows[0]
 }

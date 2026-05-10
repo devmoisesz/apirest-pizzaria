@@ -3,8 +3,8 @@ import usersService from '../service/usersService.js'
 
 const cadastrar = async(req, res, next) => {
     try{
-        const { nome, email } = req.body
-        const usuario = await usersService.cadastrar({nome, email})
+        const { nome, email, senha } = req.body
+        const usuario = await usersService.cadastrar({nome, email, senha})
         res.status(201).json(usuario)
     } catch(error){
         next(error)
