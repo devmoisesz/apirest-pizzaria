@@ -10,7 +10,7 @@ const cadastrar = async ({nome, email, senha}) => {
     if(jaExiste) throw new Error('Email já cadastrado')
     const hash = await bcrypt.hash(senha, 10)
     //Retornar o cadastro feito
-    return usersRepository.criar({nome, email, senha})
+    return usersRepository.criar({nome, email, senha: hash})
 }
 
 const listar = async() => {
