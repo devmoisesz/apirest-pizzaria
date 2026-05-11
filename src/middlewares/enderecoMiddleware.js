@@ -10,6 +10,15 @@ const schema = z.object({
     cep: z.string('Valor inválido. O campo cep deve conter texto.').min(9).max(9)
 })
 
+const schemaEnderecoEditado = z.object({
+    cidade: z.string('Valor inválido. O campo cidade deve conter texto.').min(3).max(40).optional(),
+    rua: z.string('Valor inválido. O campo rua deve conter texto.').max(40).optional(),
+    numero: z.string('Valor inválido. O campo número deve conter texto.').max(10).optional(),
+    bairro: z.string('Valor inválido. O campo bairro deve conter texto.').max(40).optional(),
+    complemento: z.string('Valor inválido. O campo complemento deve conter texto.').max(30).optional(),
+    cep: z.string('Valor inválido. O campo cep deve conter texto.').min(9).max(9).optional()
+})
+
 function VerificarCadastro(req, res, next){
     const cadastro = schema.safeParse(req.body)
     //verificar dados
@@ -25,4 +34,18 @@ function VerificarCadastro(req, res, next){
     next()
 }
 
-export default {VerificarCadastro}
+function EnderecoEditado(req, res, next) {
+    const cadastro = schemaEnderecoEditado.safeParse(req.body)
+    //verificar dados
+    if(!cadastro.success){
+        return res.status(400).json({
+            error: cadastro.error.issues.map(issue => ({
+                campo: issue.path[0], //nome do campo que falhou
+                mensagem: issue.message //descrição do erro
+            }))
+        })
+    }
+    next()
+}
+
+export default {VerificarCadastro, EnderecoEditado}

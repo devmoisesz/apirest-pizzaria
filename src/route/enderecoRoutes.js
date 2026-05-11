@@ -2,17 +2,35 @@ import { Router } from 'express'
 import enderecoController from '../controller/enderecoController.js'
 import enderecoMiddleware from '../middlewares/enderecoMiddleware.js'
 import authMiddleware from '../middlewares/authMiddleware.js'
+import adminMiddleware from '../middlewares/adminMiddleware.js'
 
 const router = Router()
 
-router.post('/', authMiddleware.autenticarToken, enderecoMiddleware.VerificarCadastro, enderecoController.CadastrarEnderecos) //Rota pra validar e cadastros de endereços
+//Rota pra validar e cadastros de endereços(Apenas Admin)
+router.post('/', authMiddleware.autenticarToken, 
+    adminMiddleware.apenasAdmin,
+    enderecoMiddleware.VerificarCadastro, 
+    enderecoController.CadastrarEnderecos) 
 
-router.get('/', authMiddleware.autenticarToken, enderecoController.ListarEnderecos) //Rota pra listagem de todos os endereços cadastrados
+//Rota pra listagem de todos os endereços cadastrados(Apenas Admin tem acesso)
+router.get('/', authMiddleware.autenticarToken, 
+    adminMiddleware.apenasAdmin, 
+    enderecoController.ListarEnderecos) 
 
-router.get('/:id', authMiddleware.autenticarToken, enderecoController.ListarEndereco) //Rota pra listagem de apenas um endereço requisitado pelo id
+//Rota pra listagem de apenas um endereço requisitado pelo id(Apenas Admin tem acesso)
+router.get('/:id', authMiddleware.autenticarToken,
+    adminMiddleware.apenasAdmin, 
+    enderecoController.ListarEndereco) 
 
-router.put('/:id', authMiddleware.autenticarToken, enderecoController.EditarEndereco) //Rota pra edição de apenas um endereço requisitado pelo id
+//Rota pra edição de apenas um endereço requisitado pelo id(Apenas Admin tem acesso)
+router.put('/:id', authMiddleware.autenticarToken, 
+    adminMiddleware.apenasAdmin, 
+    enderecoMiddleware.EnderecoEditado, 
+    enderecoController.EditarEndereco) 
 
-router.delete('/:id', authMiddleware.autenticarToken, enderecoController.DeletarEndereco) //Rota pra deletar apenas um endereço requisitado pelo id
+//Rota pra deletar apenas um endereço requisitado pelo id(Apenas Admin tem acesso)
+router.delete('/:id', authMiddleware.autenticarToken, 
+    adminMiddleware.apenasAdmin, 
+    enderecoController.DeletarEndereco) 
 
 export default router
