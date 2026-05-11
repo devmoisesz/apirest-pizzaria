@@ -2,7 +2,7 @@
 
 <p align="center">
   Uma API REST completa para gerenciamento de uma pizzaria — construída do zero com Node.js, Express e PostgreSQL.<br/>
-  Autenticação JWT, validação de dados, arquitetura em camadas e muito mais.
+  Autenticação JWT, controle de acesso por papel, validação de dados, arquitetura em camadas e muito mais.
 </p>
 
 <p align="center">
@@ -21,7 +21,7 @@
 
 Este projeto nasceu como um exercício prático de desenvolvimento backend. A ideia foi simples: construir uma API real, com todas as dores e decisões que um desenvolvedor encontra no dia a dia.
 
-Ao longo do desenvolvimento foram tomadas decisões de arquitetura, modelagem de banco de dados, segurança com autenticação JWT, validação de dados e tratamento de erros — tudo organizado em uma estrutura escalável e de fácil manutenção.
+Ao longo do desenvolvimento foram tomadas decisões de arquitetura, modelagem de banco de dados, segurança com autenticação JWT, controle de acesso por papel (admin/cliente), validação de dados e tratamento de erros — tudo organizado em uma estrutura escalável e de fácil manutenção.
 
 O resultado é uma API capaz de gerenciar usuários, cardápio, pedidos e endereços de uma pizzaria do mundo real.
 
@@ -36,7 +36,7 @@ Route       →   define os caminhos da API
 Controller  →   lida com req e res
 Service     →   regras de negócio e verificações
 Repository  →   queries SQL no banco
-Middleware  →   validação de dados e autenticação
+Middleware  →   validação de dados, autenticação e controle de acesso
 ```
 
 ```
@@ -79,7 +79,7 @@ npm install
 ```env
 DATABASE_URL='postgresql://usuario:senha@localhost:5432/pizzaria'
 JWT_SECRET='sua_chave_secreta'
-PORT=1024 # ou qualquer outra porta disponível
+PORT=3001  # ou qualquer porta disponível
 ```
 
 **4. Inicie o servidor**
@@ -87,11 +87,11 @@ PORT=1024 # ou qualquer outra porta disponível
 node --watch server.js
 ```
 
-> Servidor rodando em `http://localhost:1024`
+> Servidor rodando em `http://localhost:3001`
 
 ---
 
-## 🔐 Autenticação
+## 🔐 Autenticação e Controle de Acesso
 
 A API utiliza JWT para proteger as rotas. Faça login para obter o token e envie-o no header de cada requisição protegida:
 
@@ -99,20 +99,24 @@ A API utiliza JWT para proteger as rotas. Faça login para obter o token e envie
 Authorization: Bearer seu_token_aqui
 ```
 
+O token carrega o `id` e o `papel` do usuário — `admin` ou `cliente`.
+
 **Rotas públicas** — não precisam de token:
 - `POST /usuarios` — cadastro
 - `POST /login` — login
 - `GET /produtos` e `GET /produtos/:id` — cardápio
-- `GET /categorias`, `GET /categorias/:id` e `GET /categorias/:id/produtos` — categorias
+- `GET /categorias`, `GET /categorias/:id` e `GET /categorias/:id/produtos`
 
-**Cliente autenticado (Rotas protegidas)** — precisam de token:
-- `GET /usuarios/perfil` e `PUT /usuarios/perfil` — Ver e editar próprio perfil
-- `POST /pedidos` e `DELETE /pedidos/perfil` — Fazer e cancelar próprio pedido 
-- `POST /enderecos`, `GET /enderecos/perfil`, `PUT /enderecos/perfil`, `DELETE /enderecos/perfil` — Ver e gerenciar próprios endereços
+**Cliente autenticado** — precisam de token:
+- `GET /usuarios/perfil` — ver próprio perfil
+- `PUT /usuarios/perfil` — editar próprio perfil
+- `POST /pedidos` — fazer pedido
 
-**Apenas Admin (Rotas protegidas)** — precisam de token:
-- Acesso a todas as rotas
-- Principalmente (CRUD de produtos e categorias, ver todos os pedidos e usuários e atualizar status do pedido)
+
+**Apenas Admin** — precisam de token com `papel: admin`:
+- CRUD completo de produtos e categorias
+- Ver todos os usuários, pedidos e endereços
+- Atualizar status de qualquer pedido
 
 ---
 
@@ -120,19 +124,20 @@ Authorization: Bearer seu_token_aqui
 
 ### 👤 Usuários `/usuarios`
 
-| Método | Rota | Descrição | Auth |
-|--------|------|-----------|------|
-| `GET` | `/usuarios` | Lista todos os usuários | ✅ |
-| `GET` | `/perfil`   | Lista dados do usuário logado | ✅ |
-| `GET` | `/usuarios/:id` | Busca usuário por ID | ✅ |
-| `GET` | `/usuarios/:id/pedidos` | Lista pedidos de um usuário | ✅ |
-| `GET` | `/usuarios/:id/enderecos` | Lista endereços de um usuário | ✅ |
-| `POST` | `/usuarios` | Cadastra novo usuário | ❌ |
-| `PUT` | `/usuarios/:id` | Atualiza usuário | ✅ |
-| `DELETE` | `/usuarios/:id` | Remove usuário | ✅ |
+| Método | Rota | Descrição | Acesso |
+|--------|------|-----------|--------|
+| `POST` | `/usuarios` | Cadastra novo usuário | Público |
+| `GET` | `/usuarios` | Lista todos os usuários | Admin |
+| `GET` | `/usuarios/perfil` | Dados do usuário logado | Cliente/Admin |
+| `GET` | `/usuarios/:id` | Busca usuário por ID | Admin |
+| `GET` | `/usuarios/:id/pedidos` | Lista pedidos de um usuário | Admin |
+| `GET` | `/usuarios/:id/enderecos` | Lista endereços de um usuário | Admin |
+| `PUT` | `/usuarios/perfil` | Edita perfil do usuário logado | Cliente/Admin |
+| `PUT` | `/usuarios/:id` | Atualiza qualquer usuário | Admin |
+| `DELETE` | `/usuarios/:id` | Remove usuário | Admin |
 
 <details>
-<summary>Ver body</summary>
+<summary>Ver body — POST/PUT</summary>
 
 ```json
 {
@@ -147,9 +152,9 @@ Authorization: Bearer seu_token_aqui
 
 ### 🔑 Login `/login`
 
-| Método | Rota | Descrição | Auth |
-|--------|------|-----------|------|
-| `POST` | `/login` | Autentica o usuário e retorna o token | ❌ |
+| Método | Rota | Descrição | Acesso |
+|--------|------|-----------|--------|
+| `POST` | `/login` | Autentica e retorna o token | Público |
 
 <details>
 <summary>Ver body</summary>
@@ -173,14 +178,14 @@ Authorization: Bearer seu_token_aqui
 
 ### 🗂️ Categorias `/categorias`
 
-| Método | Rota | Descrição | Auth |
-|--------|------|-----------|------|
-| `GET` | `/categorias` | Lista todas as categorias | ❌ |
-| `GET` | `/categorias/:id` | Busca categoria por ID | ❌ |
-| `GET` | `/categorias/:id/produtos` | Lista produtos de uma categoria | ❌ |
-| `POST` | `/categorias` | Cadastra nova categoria | ✅ |
-| `PUT` | `/categorias/:id` | Atualiza categoria | ✅ |
-| `DELETE` | `/categorias/:id` | Remove categoria | ✅ |
+| Método | Rota | Descrição | Acesso |
+|--------|------|-----------|--------|
+| `GET` | `/categorias` | Lista todas as categorias | Público |
+| `GET` | `/categorias/:id` | Busca categoria por ID | Público |
+| `GET` | `/categorias/:id/produtos` | Lista produtos de uma categoria | Público |
+| `POST` | `/categorias` | Cadastra nova categoria | Admin |
+| `PUT` | `/categorias/:id` | Atualiza categoria | Admin |
+| `DELETE` | `/categorias/:id` | Remove categoria | Admin |
 
 <details>
 <summary>Ver body</summary>
@@ -196,13 +201,13 @@ Authorization: Bearer seu_token_aqui
 
 ### 🍕 Produtos `/produtos`
 
-| Método | Rota | Descrição | Auth |
-|--------|------|-----------|------|
-| `GET` | `/produtos` | Lista todos os produtos | ❌ |
-| `GET` | `/produtos/:id` | Busca produto por ID | ❌ |
-| `POST` | `/produtos` | Cadastra novo produto | ✅ |
-| `PUT` | `/produtos/:id` | Atualiza produto | ✅ |
-| `DELETE` | `/produtos/:id` | Remove produto | ✅ |
+| Método | Rota | Descrição | Acesso |
+|--------|------|-----------|--------|
+| `GET` | `/produtos` | Lista todos os produtos | Público |
+| `GET` | `/produtos/:id` | Busca produto por ID | Público |
+| `POST` | `/produtos` | Cadastra novo produto | Admin |
+| `PUT` | `/produtos/:id` | Atualiza produto | Admin |
+| `DELETE` | `/produtos/:id` | Remove produto | Admin |
 
 <details>
 <summary>Ver body</summary>
@@ -221,13 +226,13 @@ Authorization: Bearer seu_token_aqui
 
 ### 📦 Pedidos `/pedidos`
 
-| Método | Rota | Descrição | Auth |
-|--------|------|-----------|------|
-| `GET` | `/pedidos` | Lista todos os pedidos | ✅ |
-| `GET` | `/pedidos/:id` | Busca pedido por ID | ✅ |
-| `POST` | `/pedidos` | Cria um novo pedido | ✅ |
-| `PUT` | `/pedidos/:id` | Atualiza status do pedido | ✅ |
-| `DELETE` | `/pedidos/:id` | Cancela pedido (só se pendente) | ✅ |
+| Método | Rota | Descrição | Acesso |
+|--------|------|-----------|--------|
+| `GET` | `/pedidos` | Lista todos os pedidos | Admin |
+| `GET` | `/pedidos/:id` | Busca pedido por ID | Admin |
+| `POST` | `/pedidos` | Cria um novo pedido | Cliente/Admin |
+| `PUT` | `/pedidos/:id` | Atualiza status do pedido | Admin |
+| `DELETE` | `/pedidos/:id` | Cancela pedido (só se pendente) | Cliente/Admin |
 
 <details>
 <summary>Ver body — POST</summary>
@@ -260,13 +265,13 @@ Authorization: Bearer seu_token_aqui
 
 ### 📍 Endereços `/enderecos`
 
-| Método | Rota | Descrição | Auth |
-|--------|------|-----------|------|
-| `GET` | `/enderecos` | Lista todos os endereços | ✅ |
-| `GET` | `/enderecos/:id` | Busca endereço por ID | ✅ |
-| `POST` | `/enderecos` | Cadastra novo endereço | ✅ |
-| `PUT` | `/enderecos/:id` | Atualiza endereço | ✅ |
-| `DELETE` | `/enderecos/:id` | Remove endereço | ✅ |
+| Método | Rota | Descrição | Acesso |
+|--------|------|-----------|--------|
+| `GET` | `/enderecos` | Lista todos os endereços | Admin |
+| `GET` | `/enderecos/:id` | Busca endereço por ID | Admin |
+| `POST` | `/enderecos` | Cadastra novo endereço | Admin |
+| `PUT` | `/enderecos/:id` | Atualiza endereço | Admin |
+| `DELETE` | `/enderecos/:id` | Remove endereço | Admin |
 
 <details>
 <summary>Ver body — POST</summary>
@@ -288,6 +293,8 @@ Authorization: Bearer seu_token_aqui
 
 ## 🔧 O que vem por aí
 
+- [ ] Rota Delete para o cliente `DELETE /pedidos/perfil` — cancelar o próprio pedido (só se pendente)
+- [ ] Rotas de endereço para o cliente gerenciar os próprios endereços
 - [ ] Histórico de pedidos — `GET /pedidos/historico` retorna entregues e cancelados
 - [ ] Busca de produtos por nome — `GET /produtos?nome=calabresa`
 - [ ] Relatório de vendas — total vendido por dia e produto mais pedido
