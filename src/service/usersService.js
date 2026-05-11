@@ -50,7 +50,30 @@ async function EnderecoDoUsuario(id) {
     return endereco
 }
 
+async function EditarPerfil(id, {nome, email, senha}) {
+    //Procura no banco se já existe alguém com esse email
+    const usuarioComEmail = await usersRepository.buscarUsuarioPorEmail(email)
+    //Verifica se existe usuário com esse email e se o email pertence a outro usuário
+    if(usuarioComEmail && usuarioComEmail.id !== id){
+        throw new Error('Email já cadastrado')
+    }
+
+    let senhaHash
+
+    if(senha){
+        senhaHash = await bcrypt.hash(senha, 10) //Criptografa a senha
+    }
+
+    return await usersRepository.EditarPerfil(id, {
+        nome,
+        email,
+        senha: senhaHash
+    })
+}
+
 const update = async(id, up) =>{
+    const jaExiste = await usersRepository.buscarPorEmail(up.email)
+    if(jaExiste) throw new Error('Email já cadastrado')
     //Verifica pra edição se o usuário existe no banco e atualiza as alterações no banco
     const usuario = await usersRepository.editaUser(id, up)
     if(!usuario) throw new Error('Usuário não encontrado')
@@ -68,4 +91,4 @@ const deleteUser = async(id)=>{
     return usersRepository.delect(id)
 }
 
-export default {cadastrar, listar, listarPorId, update, deleteUser, PedidosDoUsuario, EnderecoDoUsuario, listarDados}
+export default {cadastrar, listar, listarPorId, update, deleteUser, PedidosDoUsuario, EnderecoDoUsuario, listarDados, EditarPerfil}

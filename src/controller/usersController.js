@@ -61,6 +61,17 @@ async function EnderecoDoUsuario(req, res, next) {
     }
 }
 
+async function EditarPerfil(req, res, next) {
+    try {
+        const id = req.usuario.id
+        const {nome, email, senha} = req.body
+        const PerfilEditado = await usersService.EditarPerfil(id, {nome, email, senha})
+        res.status(200).json(PerfilEditado)
+    } catch (error) {
+        next(error)
+    }
+}
+
 const editarPorId = async(req, res, next) =>{
     try{
         const usuarioId = req.params.id
@@ -82,4 +93,4 @@ const deleteUser = async(req, res, next)=>{
     }
 }
 
-export default {cadastrar, listar, listarPorId, editarPorId, deleteUser, PedidosDoUsuario, EnderecoDoUsuario, listarDados}
+export default {cadastrar, listar, listarPorId, EditarPerfil, editarPorId, deleteUser, PedidosDoUsuario, EnderecoDoUsuario, listarDados}

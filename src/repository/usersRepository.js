@@ -1,4 +1,5 @@
 //Repository consulta o banco pra atender as requisições do usuário
+import { no } from "zod/locales";
 import pool from "../../database/db.js";
 
 //rows é um array que guarda o resultado da consulta SQL
@@ -11,6 +12,14 @@ async function buscarPorEmail(email){
     )
     return rows[0]
 }
+
+async function buscarUsuarioPorEmail(email) {
+    const {rows} = await pool.query(`
+        SELECT * FROM users WHERE email = $1   
+    `,[email])
+    return rows[0]
+}
+
 const criar = async({nome, email, senha}) => {
     //Cadastrada as informações do usuário no banco, com a data de criação 
     const {rows} = await pool.query(
@@ -58,6 +67,29 @@ async function EnderecoDoUsuario(id) {
     return rows[0]
 }
 
+async function EditarPerfil(id, {nome, email, senha}) {
+
+    //Caso usúario edite a senha
+    if(senha){
+        const {rows} = await pool.query(`
+            UPDATE users
+            SET nome = $1, email = $2, senha = $3
+            WHERE id = $4 
+            RETURNING nome, email
+        `,[nome, email, senha, id])
+        return rows[0]
+    }
+
+    //Caso não edite a senha
+    const {rows} = await pool.query(`
+        UPDATE users
+        SET nome = $1, email = $2
+        WHERE id = $3
+        RETURNING nome, email    
+    `,[nome,email,id])
+    return rows[0]
+}
+
 const editaUser = async(id, up) =>{
     //Atualiza dados do usuário
     const {rows} = await pool.query(
@@ -83,4 +115,4 @@ async function BuscarUsuario(email) {
     return rows[0]
 }
 
-export default {buscarPorEmail, criar, listar, buscarPorId, EnderecoDoUsuario, editaUser, delect, BuscarUsuario}
+export default {buscarPorEmail, buscarUsuarioPorEmail, criar, listar, buscarPorId, EnderecoDoUsuario, EditarPerfil, editaUser, delect, BuscarUsuario}
