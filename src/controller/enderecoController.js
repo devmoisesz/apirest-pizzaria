@@ -48,7 +48,7 @@ async function EditarEndereco(req, res, next) {
 async function DeletarEndereco(req, res, next) {
     try {
         const id = req.params.id
-        const deletar = enderecoService.DeletarEndereco(id)
+        const deletar = await enderecoService.DeletarEndereco(id)
         res.status(200).json({mensagem: 'Deletado com sucesso!'})
     } catch (error) {
         next(error)

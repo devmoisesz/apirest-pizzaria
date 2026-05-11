@@ -1,5 +1,4 @@
 //Repository consulta o banco pra atender as requisições do usuário
-import { no } from "zod/locales";
 import pool from "../../database/db.js";
 
 //rows é um array que guarda o resultado da consulta SQL

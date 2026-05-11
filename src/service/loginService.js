@@ -1,5 +1,5 @@
 import usersRepository from '../repository/usersRepository.js'
-import bcrypt, { hash } from 'bcryptjs'
+import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
 async function Login(email, senha) {
