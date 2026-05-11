@@ -2,25 +2,35 @@ import { Router } from "express";
 import usersController from '../controller/usersController.js'
 import usersMiddleware from '../middlewares/usersMiddleware.js'
 import authMiddleware from '../middlewares/authMiddleware.js'
+import adminMiddleware from '../middlewares/adminMiddleware.js'
 
 const router = Router()
 
-router.post('/', usersController.cadastrar) //Rota pra cadastro de usuários
+//Rota pra cadastro de usuários(Pública)
+router.post('/', usersMiddleware.ValidarCadastro, usersController.cadastrar) 
 
-router.get('/', authMiddleware.autenticarToken, usersController.listar) //Rota pra listar todos usuários cadastrados
+//Rota pra listar todos usuários cadastrados(Apenas Admin tem acesso)
+router.get('/', authMiddleware.autenticarToken, adminMiddleware.apenasAdmin, usersController.listar) 
 
-router.get('/perfil', authMiddleware.autenticarToken, usersController.listarDados) //Rota pra ler dados do cliente logado
+//Rota pra ler dados do cliente logado(Cliente e Admin tem acesso)
+router.get('/perfil', authMiddleware.autenticarToken, usersController.listarDados) 
 
-router.get('/:id', authMiddleware.autenticarToken, usersController.listarPorId) //Rota pra listar apenas usuário requisitado pelo ID
+//Rota pra listar apenas usuário requisitado pelo ID(Apenas Admin tem acesso)
+router.get('/:id', authMiddleware.autenticarToken, adminMiddleware.apenasAdmin, usersController.listarPorId) 
 
-router.get('/:id/pedidos', authMiddleware.autenticarToken, usersController.PedidosDoUsuario) //Rota pra listar os Pedidos do Usuário
+//Rota pra listar os Pedidos do Usuário(Apenas Admin tem acesso)
+router.get('/:id/pedidos', authMiddleware.autenticarToken, adminMiddleware.apenasAdmin, usersController.PedidosDoUsuario) 
 
-router.get('/:id/enderecos', authMiddleware.autenticarToken, usersController.EnderecoDoUsuario) //Rota pra listar o Endereço do Usuário
+//Rota pra listar o Endereço do Usuário(Apenas Admin tem acesso)
+router.get('/:id/enderecos', authMiddleware.autenticarToken, adminMiddleware.apenasAdmin, usersController.EnderecoDoUsuario) 
 
-router.put('/perfil', authMiddleware.autenticarToken, usersController.EditarPerfil) //Rota pra editar perfil do cliente logado
+//Rota pra editar perfil do cliente logado(Apenas Cliente e Admin tem acesso)
+router.put('/perfil', authMiddleware.autenticarToken, usersMiddleware.ValidarEditarPerfil, usersController.EditarPerfil) 
 
-router.put('/:id', authMiddleware.autenticarToken, usersController.editarPorId) //Rota pra editar dados do usuário
+//Rota pra editar dados do usuário(Apenas Admin tem acesso)
+router.put('/:id', authMiddleware.autenticarToken, adminMiddleware.apenasAdmin, usersMiddleware.ValidarCadastro, usersController.editarPorId) 
 
-router.delete('/:id', authMiddleware.autenticarToken, usersController.deleteUser) //Rota pra deletar usuário
+//Rota pra deletar usuário(Apenas Admin tem acesso)
+router.delete('/:id', authMiddleware.autenticarToken, adminMiddleware.apenasAdmin, usersController.deleteUser) 
 
 export default router
