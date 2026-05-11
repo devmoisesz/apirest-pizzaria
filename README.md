@@ -103,7 +103,7 @@ Authorization: Bearer seu_token_aqui
 - `POST /usuarios` — cadastro
 - `POST /login` — login
 - `GET /produtos` e `GET /produtos/:id` — cardápio
-- `GET /categorias` e `GET /categorias/:id` — categorias
+- `GET /categorias`, `GET /categorias/:id` e `GET /categorias/:id/produtos` — categorias
 
 **Rotas protegidas** — precisam de token:
 - Todas as rotas de pedidos
@@ -120,6 +120,7 @@ Authorization: Bearer seu_token_aqui
 | Método | Rota | Descrição | Auth |
 |--------|------|-----------|------|
 | `GET` | `/usuarios` | Lista todos os usuários | ✅ |
+| `GET` | `/perfil`   | Lista dados do usuário logado | ✅ |
 | `GET` | `/usuarios/:id` | Busca usuário por ID | ✅ |
 | `GET` | `/usuarios/:id/pedidos` | Lista pedidos de um usuário | ✅ |
 | `GET` | `/usuarios/:id/enderecos` | Lista endereços de um usuário | ✅ |
