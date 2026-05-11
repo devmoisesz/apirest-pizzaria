@@ -1,18 +1,35 @@
 import { Router } from "express";
 import pedidosController from '../controller/pedidosController.js'
 import pedidosMiddleware from '../middlewares/pedidosMiddleware.js'
-import authMiddleware from "../middlewares/authMiddleware.js";
+import authMiddleware from "../middlewares/authMiddleware.js"
+import adminMiddleware from '../middlewares/adminMiddleware.js'
 
 const router = Router()
 
-router.post('/', pedidosMiddleware.ValidarCadastro, pedidosController.Criarpedido) //Rota pra validar e cadastrar pedidos
+//Rota pra validar e cadastrar pedidos
+router.post('/', authMiddleware.autenticarToken, 
+    pedidosMiddleware.ValidarCadastro, 
+    pedidosController.Criarpedido) 
 
-router.get('/', authMiddleware.autenticarToken, authMiddleware.autenticarToken, pedidosController.listarPedidos) //Rota pra listar todos pedidos cadastrados
+//Rota pra listar todos pedidos cadastrados(Apenas Admin tem acesso)
+router.get('/', authMiddleware.autenticarToken, 
+    adminMiddleware.apenasAdmin,
+    pedidosController.listarPedidos) 
 
-router.get('/:id', authMiddleware.autenticarToken, pedidosController.listarPedidosPorId) //Rota pra listar apenas o pedido requisitado pelo id
+//Rota pra listar apenas o pedido requisitado pelo id(Apenas Admin tem acesso)
+router.get('/:id', authMiddleware.autenticarToken, 
+    adminMiddleware.apenasAdmin,
+    pedidosController.listarPedidosPorId) 
 
-router.put('/:id', authMiddleware.autenticarToken, pedidosController.EditarPedido) //Rota pra editar apenas o pedido requisitado pelo id
+//Rota pra editar apenas o pedido requisitado pelo id(Apenas Admin tem acesso)
+router.put('/:id', authMiddleware.autenticarToken, 
+    adminMiddleware.apenasAdmin,
+    pedidosMiddleware.ValidarEdiçãoDePedido,
+    pedidosController.EditarPedido) 
 
-router.delete('/:id', authMiddleware.autenticarToken, pedidosController.DeletarPedido) //Rota pra deletar apenas o pedido requisitado pelo id
+//Rota pra deletar apenas o pedido requisitado pelo id(Apenas Admin tem acesso)
+router.delete('/:id', authMiddleware.autenticarToken, 
+    adminMiddleware.apenasAdmin, 
+    pedidosController.DeletarPedido) 
 
 export default router
