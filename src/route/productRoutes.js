@@ -2,17 +2,34 @@ import { Router } from 'express'
 import productController from '../controller/productController.js'
 import productMiddleware from '../middlewares/productMiddleware.js'
 import authMiddleware from '../middlewares/authMiddleware.js'
+import adminMiddleware from '../middlewares/adminMiddleware.js'
 
 const router = Router()
 
-router.post('/', authMiddleware.autenticarToken, productMiddleware.ValidarCadastro, productController.CadastrarProduto) //Rota pra validar e cadastrar produtos
+//Rota pra validar e cadastrar produtos(Apenas Admin tem acesso)
+router.post('/', authMiddleware.autenticarToken,
+    adminMiddleware.apenasAdmin, 
+    productMiddleware.ValidarCadastro, 
+    productController.CadastrarProduto
+    ) 
 
-router.get('/', productController.LerProduto) //Rota pra listar todos produtos cadastrados
+//Rota pra listar todos produtos cadastrados
+router.get('/', productController.LerProduto) 
 
-router.get('/:id', productController.LerProdutoPorId) //Rota pra ler apenas produto requisitado pelo id
+//Rota pra ler apenas produto requisitado pelo id
+router.get('/:id', productController.LerProdutoPorId) 
 
-router.put('/:id', authMiddleware.autenticarToken, productController.editarProduto) //Rota pra editar produto requisitado pelo id
+//Rota pra editar produto requisitado pelo id(Apenas Admin tem acesso)
+router.put('/:id', authMiddleware.autenticarToken,
+    adminMiddleware.apenasAdmin, 
+    productMiddleware.ValidarCadastro, 
+    productController.editarProduto
+    ) 
 
-router.delete('/:id', authMiddleware.autenticarToken, productController.deletarProduto) //Rota pra deletar produto requisitado pelo id
+//Rota pra deletar produto requisitado pelo id(Apenas Admin tem acesso)
+router.delete('/:id', authMiddleware.autenticarToken, adminMiddleware.apenasAdmin, 
+    productController.deletarProduto
+    )
+
 
 export default router
