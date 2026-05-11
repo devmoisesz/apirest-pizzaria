@@ -105,11 +105,14 @@ Authorization: Bearer seu_token_aqui
 - `GET /produtos` e `GET /produtos/:id` — cardápio
 - `GET /categorias`, `GET /categorias/:id` e `GET /categorias/:id/produtos` — categorias
 
-**Rotas protegidas** — precisam de token:
-- Todas as rotas de pedidos
-- Todas as rotas de endereços
-- GET, PUT e DELETE de usuários
-- PUT e DELETE de produtos e categorias
+**Cliente autenticado (Rotas protegidas)** — precisam de token:
+- `GET /usuarios/perfil` e `PUT /usuarios/perfil` — Ver e editar próprio perfil
+- `POST /pedidos` e `DELETE /pedidos/perfil` — Fazer e cancelar próprio pedido 
+- `POST /enderecos`, `GET /enderecos/perfil`, `PUT /enderecos/perfil`, `DELETE /enderecos/perfil` — Ver e gerenciar próprios endereços
+
+**Apenas Admin (Rotas protegidas)** — precisam de token:
+- Acesso a todas as rotas
+- Principalmente (CRUD de produtos e categorias, ver todos os pedidos e usuários e atualizar status do pedido)
 
 ---
 
