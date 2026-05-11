@@ -9,6 +9,8 @@ router.post('/', usersMiddleware.ValidarCadastro, usersController.cadastrar) //R
 
 router.get('/', authMiddleware.autenticarToken, usersController.listar) //Rota pra Listar todos usuários cadastrados
 
+router.get('/perfil', authMiddleware.autenticarToken, usersController.listarDados)
+
 router.get('/:id', authMiddleware.autenticarToken, usersController.listarPorId) //Rota pra Listar apenas usuário requisitado pelo ID
 
 router.get('/:id/pedidos', authMiddleware.autenticarToken, usersController.PedidosDoUsuario) //Rota pra Listar os Pedidos do Usuário

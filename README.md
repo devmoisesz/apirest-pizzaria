@@ -285,7 +285,6 @@ Authorization: Bearer seu_token_aqui
 ## 🔧 O que vem por aí
 
 - [ ] Histórico de pedidos — `GET /pedidos/historico` retorna entregues e cancelados
-- [ ] Rota de perfil — `GET /usuarios/perfil` retorna os dados do usuário logado via JWT
 - [ ] Busca de produtos por nome — `GET /produtos?nome=calabresa`
 - [ ] Relatório de vendas — total vendido por dia e produto mais pedido
 - [ ] Paginação nas listagens

@@ -30,6 +30,16 @@ const listarPorId = async(req, res, next) =>{
     }
 }
 
+async function listarDados(req, res, next) {
+    try {
+        const id = req.usuario.id
+        const dadosDoUsuario = await usersService.listarDados(id)
+        res.status(200).json(dadosDoUsuario)
+    } catch (error) {
+        next(error)
+    }
+}
+
 //Listagem do pedido do usuário
 async function PedidosDoUsuario(req, res, next) {
     try {
@@ -72,4 +82,4 @@ const deleteUser = async(req, res, next)=>{
     }
 }
 
-export default {cadastrar, listar, listarPorId, editarPorId, deleteUser, PedidosDoUsuario, EnderecoDoUsuario}
+export default {cadastrar, listar, listarPorId, editarPorId, deleteUser, PedidosDoUsuario, EnderecoDoUsuario, listarDados}

@@ -26,6 +26,12 @@ const listarPorId = async(id) =>{
     return usuario
 }
 
+async function listarDados(id) {
+    const usuario = await usersRepository.buscarPorId(id)
+    if(!usuario) throw new Error('Usuário não encontrado')
+    return usuario
+}
+
 async function PedidosDoUsuario(id) {
     //Verificar se o usuário requisitado existe no banco
     const usuario = await usersRepository.buscarPorId(id)
@@ -62,4 +68,4 @@ const deleteUser = async(id)=>{
     return usersRepository.delect(id)
 }
 
-export default {cadastrar, listar, listarPorId, update, deleteUser, PedidosDoUsuario, EnderecoDoUsuario}
+export default {cadastrar, listar, listarPorId, update, deleteUser, PedidosDoUsuario, EnderecoDoUsuario, listarDados}
