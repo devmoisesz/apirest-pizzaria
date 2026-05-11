@@ -5,7 +5,7 @@ import authMiddleware from '../middlewares/authMiddleware.js'
 
 const router = Router()
 
-router.post('/', usersMiddleware.ValidarCadastro, usersController.cadastrar) //Rota pra validar e cadastro de usuários
+router.post('/', usersController.cadastrar) //Rota pra cadastro de usuários
 
 router.get('/', authMiddleware.autenticarToken, usersController.listar) //Rota pra Listar todos usuários cadastrados
 

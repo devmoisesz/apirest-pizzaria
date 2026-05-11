@@ -4,6 +4,6 @@ import authMiddleware from '../middlewares/authMiddleware.js'
 
 const router = Router()
 
-router.post('/', authMiddleware.autenticarToken, loginController.Login) //Rota pra cadastrar login
+router.post('/', loginController.Login) //Rota pra cadastrar login
 
 export default router

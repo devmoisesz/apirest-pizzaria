@@ -8,9 +8,9 @@ async function Login(email, senha) {
     const senhaValida = await bcrypt.compare(senha, usuario.senha)
     if(!senhaValida) throw new Error("Senha Inválida!")
     const token = jwt.sign(
-    { id: usuario.id }, 
+    { id: usuario.id, papel: usuario.papel }, 
     process.env.JWT_SECRET,       
-    {expiresIn: '1d' }          
+    {expiresIn: '7d' }          
     )
     return { token }
 }
