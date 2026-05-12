@@ -40,14 +40,24 @@ async function EditarPedido(req, res, next) {
     }
 }
 
+async function ClienteCancelarPedido(req, res, next){
+    try {
+        const id_user = req.usuario.id
+        await pedidosService.ClienteCancelarPedido(id_user)
+        res.status(200).json({mensagem: "Pedido cancelado com sucesso"})
+    } catch (error) {
+        next(error)
+    }
+}
+
 async function DeletarPedido(req, res, next) {
     try {
         const id = req.params.id
-        const produtoDeletado = await pedidosService.DeletarPedido(id)
+        await pedidosService.DeletarPedido(id)
         res.status(200).json({mensagem: 'Deletado!'})
     } catch (error) {
         next(error)
     }
 }
 
-export default {Criarpedido, listarPedidos, listarPedidosPorId, EditarPedido, DeletarPedido}
+export default {Criarpedido, listarPedidos, listarPedidosPorId, EditarPedido, ClienteCancelarPedido, DeletarPedido}

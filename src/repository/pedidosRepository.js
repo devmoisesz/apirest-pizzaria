@@ -16,6 +16,14 @@ const buscaEndereco = async (id)=>{
     return rows[0]
 }
 
+async function BuscarPedidoPorUsuario(id_user) {
+    const { rows } = await pool.query(`
+        SELECT * FROM pedidos WHERE user_id = $1
+    `,[id_user])
+
+    return rows[0]
+}
+
 const buscaProduto = async (id)=>{
     const {rows} = await pool.query(
         'SELECT * FROM products WHERE id = $1',
@@ -160,4 +168,4 @@ async function statusPendente(id) {
     return rows[0]
 }
 
-export default {buscaUsuario, buscaEndereco, buscaProduto, Criarpedido, BuscarPedidos, buscarId, buscarPedido, EditarPedido, DeletarPedido, statusPendente, PedidosDoUsuario}
+export default {buscaUsuario, buscaEndereco, buscaProduto, Criarpedido, BuscarPedidos, buscarId, buscarPedido, EditarPedido, BuscarPedidoPorUsuario, DeletarPedido, statusPendente, PedidosDoUsuario}

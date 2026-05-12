@@ -27,6 +27,8 @@ router.put('/:id', authMiddleware.autenticarToken,
     pedidosMiddleware.ValidarEdiçãoDePedido,
     pedidosController.EditarPedido) 
 
+router.delete('/perfil', authMiddleware.autenticarToken, pedidosController.ClienteCancelarPedido)
+
 //Rota pra deletar apenas o pedido requisitado pelo id(Apenas Admin tem acesso)
 router.delete('/:id', authMiddleware.autenticarToken, 
     adminMiddleware.apenasAdmin, 

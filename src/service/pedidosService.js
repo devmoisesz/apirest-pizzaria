@@ -31,6 +31,18 @@ async function EditarPedido(id, status) {
     return await pedidosRepository.EditarPedido(id, status)
 }
 
+async function ClienteCancelarPedido(id_user) {
+    //Buscar pedido do usuario requisitado
+    const pedido = await pedidosRepository.BuscarPedidoPorUsuario(id_user)
+    //Verificar se o pedido existe
+    if(!pedido) throw new Error("Pedido não encontrado")
+    
+    //Verificar se o pedido está pendente
+    if(pedido.status !== 'pendente') throw new Error("Não é possível cancelar um pedido que não esteja pendente.")
+    
+    return await pedidosRepository.DeletarPedido(pedido.id)
+}
+
 async function DeletarPedido(id) {
     const idpedido = await pedidosRepository.buscarId(id)
     if(!idpedido) throw new Error("Pedido não encontrado!")
@@ -39,4 +51,4 @@ async function DeletarPedido(id) {
     return await pedidosRepository.DeletarPedido(id)
 }
 
-export default {Criarpedido, listarPedidos, listarPorId, EditarPedido, DeletarPedido}
+export default {Criarpedido, listarPedidos, listarPorId, EditarPedido, ClienteCancelarPedido, DeletarPedido}
