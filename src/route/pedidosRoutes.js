@@ -6,12 +6,12 @@ import adminMiddleware from '../middlewares/adminMiddleware.js'
 
 const router = Router()
 
-//Rota pra validar e cadastrar pedidos
+//Rota pra validar e cadastrar pedidos(Cliente e Admin tem acesso)
 router.post('/', authMiddleware.autenticarToken, 
     pedidosMiddleware.ValidarCadastro, 
     pedidosController.Criarpedido) 
 
-//Rota pra listar todos pedidos cadastrados(Apenas Admin tem acesso)
+//Rota pra listar todos pedidos cadastrados(Apenas Admin" tem acesso)
 router.get('/', authMiddleware.autenticarToken, 
     adminMiddleware.apenasAdmin,
     pedidosController.listarPedidos) 
@@ -27,7 +27,10 @@ router.put('/:id', authMiddleware.autenticarToken,
     pedidosMiddleware.ValidarEdiçãoDePedido,
     pedidosController.EditarPedido) 
 
-router.delete('/perfil', authMiddleware.autenticarToken, pedidosController.ClienteCancelarPedido)
+//Rora pro cliente conseguir cancelar o próprio pedido
+router.delete('/perfil',
+    authMiddleware.autenticarToken, 
+    pedidosController.ClienteCancelarPedido)
 
 //Rota pra deletar apenas o pedido requisitado pelo id(Apenas Admin tem acesso)
 router.delete('/:id', authMiddleware.autenticarToken, 
