@@ -293,7 +293,6 @@ O token carrega o `id` e o `papel` do usuário — `admin` ou `cliente`.
 
 ## 🔧 O que vem por aí
 
-- [ ] Rota Delete para o cliente `DELETE /pedidos/perfil` — cancelar o próprio pedido (só se pendente)
 - [ ] Rotas de endereço para o cliente gerenciar os próprios endereços
 - [ ] Histórico de pedidos — `GET /pedidos/historico` retorna entregues e cancelados
 - [ ] Busca de produtos por nome — `GET /produtos?nome=calabresa`
