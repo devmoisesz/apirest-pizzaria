@@ -36,6 +36,13 @@ async function ListarEndereco(id) {
     return rows[0]
 }
 
+async function ListarEnderecoGenciado(idUser) {
+     const {rows} = await pool.query(`
+        SELECT * FROM enderecos WHERE user_id = $1
+    `,[idUser])
+    return rows[0]
+}
+
 async function EditarEndereco(id, cidade, rua, numero, bairro, complemento, cep) {
     const {rows} = await pool.query(`
         UPDATE enderecos SET cidade = $1, rua = $2, numero = $3, bairro = $4, complemento = $5, cep = $6
@@ -51,4 +58,4 @@ async function DeletarEndereco(id) {
     return rows[0]
 }
 
-export default {BuscarIDdoUsuario, CadastrarEnderecos, ListarEnderecos, BuscarIDdoEndereco, ListarEndereco, EditarEndereco, DeletarEndereco}
+export default {BuscarIDdoUsuario, CadastrarEnderecos, ListarEnderecos, ListarEnderecoGenciado, BuscarIDdoEndereco, ListarEndereco, EditarEndereco, DeletarEndereco}

@@ -10,7 +10,8 @@ const router = Router()
 router.post('/', authMiddleware.autenticarToken, 
     adminMiddleware.apenasAdmin,
     enderecoMiddleware.VerificarCadastro, 
-    enderecoController.CadastrarEnderecos) 
+    enderecoController.CadastrarEnderecos
+) 
 
 //Rota pra validar e cadastrar endereços que o próprio cliente vai cadastrar
 router.post('/perfil', authMiddleware.autenticarToken,
@@ -21,22 +22,31 @@ router.post('/perfil', authMiddleware.autenticarToken,
 //Rota pra listagem de todos os endereços cadastrados(Apenas Admin tem acesso)
 router.get('/', authMiddleware.autenticarToken, 
     adminMiddleware.apenasAdmin, 
-    enderecoController.ListarEnderecos) 
+    enderecoController.ListarEnderecos
+) 
+
+//Rota pra listar endereço cadastrado pelo cliente(Cliente e Admin tem acesso)
+router.get('/perfil', authMiddleware.autenticarToken,
+    enderecoController.ListarEnderecoGenciado
+)
 
 //Rota pra listagem de apenas um endereço requisitado pelo id(Apenas Admin tem acesso)
 router.get('/:id', authMiddleware.autenticarToken,
     adminMiddleware.apenasAdmin, 
-    enderecoController.ListarEndereco) 
+    enderecoController.ListarEndereco
+) 
 
 //Rota pra edição de apenas um endereço requisitado pelo id(Apenas Admin tem acesso)
 router.put('/:id', authMiddleware.autenticarToken, 
     adminMiddleware.apenasAdmin, 
     enderecoMiddleware.VerificarEnderecoEditado, 
-    enderecoController.EditarEndereco) 
+    enderecoController.EditarEndereco
+) 
 
 //Rota pra deletar apenas um endereço requisitado pelo id(Apenas Admin tem acesso)
 router.delete('/:id', authMiddleware.autenticarToken, 
     adminMiddleware.apenasAdmin, 
-    enderecoController.DeletarEndereco) 
+    enderecoController.DeletarEndereco
+) 
 
 export default router
