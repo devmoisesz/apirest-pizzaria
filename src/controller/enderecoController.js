@@ -15,6 +15,21 @@ async function CadastrarEnderecos(req, res, next) {
     }
 }
 
+async function CadastrarEnderecosPerfil(req, res, next) {
+    try {
+        const {cidade, rua, numero, bairro, complemento, cep} = req.body
+        //Pegar id do Token do cliente e guardar na variavel
+        const user_id = req.usuario.id
+        const endereco = await enderecoService.
+        CadastrarEnderecos(
+            user_id, cidade, rua, numero, bairro, complemento, cep
+        )
+        res.status(201).json(endereco)
+    } catch (error) {
+        next(error)
+    }
+}
+
 async function ListarEnderecos(req, res, next) {
     try {
         const enderecos = await enderecoService.ListarEnderecos()
@@ -56,4 +71,4 @@ async function DeletarEndereco(req, res, next) {
 }
 
 //exportação das funções
-export default {CadastrarEnderecos, ListarEnderecos, ListarEndereco, EditarEndereco, DeletarEndereco}
+export default {CadastrarEnderecos, CadastrarEnderecosPerfil, ListarEnderecos, ListarEndereco, EditarEndereco, DeletarEndereco}
