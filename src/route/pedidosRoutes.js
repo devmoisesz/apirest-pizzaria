@@ -6,12 +6,13 @@ import adminMiddleware from '../middlewares/adminMiddleware.js'
 
 const router = Router()
 
-//Rota pra validar e cadastrar pedidos(Cliente e Admin tem acesso)
+//Rota pra criar um pedido para o usuário autenticado
 router.post('/', authMiddleware.autenticarToken, 
     pedidosMiddleware.ValidarCadastro, 
-    pedidosController.Criarpedido) 
+    pedidosController.Criarpedido
+) 
 
-//Rota pra listar todos pedidos cadastrados(Apenas Admin" tem acesso)
+//Rota pra listar todos pedidos cadastrados(Apenas Admin tem acesso)
 router.get('/', authMiddleware.autenticarToken, 
     adminMiddleware.apenasAdmin,
     pedidosController.listarPedidos) 

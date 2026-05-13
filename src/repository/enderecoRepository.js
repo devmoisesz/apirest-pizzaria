@@ -44,6 +44,7 @@ async function ListarEnderecoGenciado(idUser) {
     return rows[0]
 }
 
+//Edita endereço de acordo com a condição(id do endereço seja X e também o user_id seja Y)
 async function EditarEnderecoGerenciado(idUser, idEndereco, cidade, rua, numero, bairro, complemento, cep) {
     const {rows} = await pool.query(`
         UPDATE 

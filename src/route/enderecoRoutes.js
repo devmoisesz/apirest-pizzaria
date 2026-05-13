@@ -13,7 +13,7 @@ router.post('/', authMiddleware.autenticarToken,
     enderecoController.CadastrarEnderecos
 ) 
 
-//Rota pra validar e cadastrar endereços que o próprio cliente vai cadastrar
+//Rota pra cadastrar um novo endereço no próprio perfil
 router.post('/perfil', authMiddleware.autenticarToken,
     enderecoMiddleware.VerificarEnderecoGenciado,
     enderecoController.CadastrarEnderecosPerfil,
@@ -25,7 +25,7 @@ router.get('/', authMiddleware.autenticarToken,
     enderecoController.ListarEnderecos
 ) 
 
-//Rota pra listar endereço cadastrado pelo cliente(Cliente e Admin tem acesso)
+//Rota pra listar os endereços do usuário autenticado
 router.get('/perfil', authMiddleware.autenticarToken,
     enderecoController.ListarEnderecoGenciado
 )
@@ -36,6 +36,7 @@ router.get('/:id', authMiddleware.autenticarToken,
     enderecoController.ListarEndereco
 ) 
 
+//Rota pra editar um endereço específico do próprio perfil
 router.put('/perfil/:id', authMiddleware.autenticarToken,
     enderecoMiddleware.VerificarEnderecoEditado,
     enderecoController.EditarEnderecoGerenciado
