@@ -59,6 +59,18 @@ async function ListarEndereco(req, res, next) {
     }
 }
 
+async function EditarEnderecoGerenciado(req, res, next) {
+    try {
+        const idUsuario = req.usuario.id
+        const idEndereco = req.params.id
+        const {cidade, rua, numero, bairro, complemento, cep} = req.body
+        const upEndereco = await enderecoService.EditarEnderecoGerenciado(idUsuario, idEndereco, cidade, rua, numero, bairro, complemento, cep)
+        res.status(200).json(upEndereco)
+    } catch (error) {
+        next(error)
+    }
+}
+
 async function EditarEndereco(req, res, next) {
     try {
         const id = req.params.id
@@ -81,4 +93,4 @@ async function DeletarEndereco(req, res, next) {
 }
 
 //exportação das funções
-export default {CadastrarEnderecos, CadastrarEnderecosPerfil, ListarEnderecos, ListarEndereco, ListarEnderecoGenciado, EditarEndereco, DeletarEndereco}
+export default {CadastrarEnderecos, CadastrarEnderecosPerfil, ListarEnderecos, ListarEndereco, ListarEnderecoGenciado, EditarEnderecoGerenciado, EditarEndereco, DeletarEndereco}

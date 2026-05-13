@@ -36,6 +36,11 @@ router.get('/:id', authMiddleware.autenticarToken,
     enderecoController.ListarEndereco
 ) 
 
+router.put('/perfil/:id', authMiddleware.autenticarToken,
+    enderecoMiddleware.VerificarEnderecoEditado,
+    enderecoController.EditarEnderecoGerenciado
+)
+
 //Rota pra edição de apenas um endereço requisitado pelo id(Apenas Admin tem acesso)
 router.put('/:id', authMiddleware.autenticarToken, 
     adminMiddleware.apenasAdmin, 

@@ -26,6 +26,14 @@ async function ListarEnderecoGenciado(idUser) {
     return endereco
 }
 
+async function EditarEnderecoGerenciado(id_user, idEndereco, cidade, rua, numero, bairro, complemento, cep) {
+    const upEndereco = await enderecoRepository.EditarEnderecoGerenciado(
+        id_user, idEndereco, cidade, rua, numero, bairro, complemento, cep
+    )
+    if(!upEndereco) throw new Error("Não Encontrado!")
+    return upEndereco
+}
+
 async function EditarEndereco(id, cidade, rua, numero, bairro, complemento, cep) {
     const idEndereco = await enderecoRepository.BuscarIDdoEndereco(id)
     if(!idEndereco) throw new Error("Endereço não Encontrado!")
@@ -38,4 +46,4 @@ async function DeletarEndereco(id) {
     return await enderecoRepository.DeletarEndereco(id)
 }
 
-export default {CadastrarEnderecos, ListarEnderecos, ListarEndereco, ListarEnderecoGenciado, EditarEndereco, DeletarEndereco}
+export default {CadastrarEnderecos, ListarEnderecos, ListarEndereco, ListarEnderecoGenciado, EditarEnderecoGerenciado, EditarEndereco, DeletarEndereco}
