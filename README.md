@@ -21,7 +21,7 @@
 
 Este projeto nasceu como um exercício prático de desenvolvimento backend. A ideia foi simples: construir uma API real, com todas as dores e decisões que um desenvolvedor encontra no dia a dia.
 
-Ao longo do desenvolvimento foram tomadas decisões de arquitetura, modelagem de banco de dados, segurança com autenticação JWT, controle de acesso por papel (admin/cliente), validação de dados e tratamento de erros — tudo organizado em uma estrutura escalável e de fácil manutenção.
+Ao longo do desenvolvimento foram tomadas decisões de arquitetura, modelagem de banco de dados, segurança com autenticação JWT, controle de acesso por papel (admin/cliente), validação de dados.
 
 O resultado é uma API capaz de gerenciar usuários, cardápio, pedidos e endereços de uma pizzaria do mundo real.
 
@@ -111,7 +111,10 @@ O token carrega o `id` e o `papel` do usuário — `admin` ou `cliente`.
 - `GET /usuarios/perfil` — ver próprio perfil
 - `PUT /usuarios/perfil` — editar próprio perfil
 - `POST /pedidos` — fazer pedido
-
+- `GET /enderecos/perfil` — ver próprio endereço
+- `POST /enderecos/perfil` — cadastrar próprio endereço
+- `PUT /enderecos/perfil/:id` — editar próprio endereço
+- `DELETE /pedidos/perfil` — cancelar próprio pedido (só se pendente)
 
 **Apenas Admin** — precisam de token com `papel: admin`:
 - CRUD completo de produtos e categorias
@@ -232,7 +235,8 @@ O token carrega o `id` e o `papel` do usuário — `admin` ou `cliente`.
 | `GET` | `/pedidos/:id` | Busca pedido por ID | Admin |
 | `POST` | `/pedidos` | Cria um novo pedido | Cliente/Admin |
 | `PUT` | `/pedidos/:id` | Atualiza status do pedido | Admin |
-| `DELETE` | `/pedidos/:id` | Cancela pedido (só se pendente) | Cliente/Admin |
+| `DELETE` | `/pedidos/perfil` | Cancela próprio pedido (só se pendente) | Cliente/Admin |
+| `DELETE` | `/pedidos/:id` | Cancela qualquer pedido | Admin |
 
 <details>
 <summary>Ver body — POST</summary>
@@ -269,12 +273,15 @@ O token carrega o `id` e o `papel` do usuário — `admin` ou `cliente`.
 |--------|------|-----------|--------|
 | `GET` | `/enderecos` | Lista todos os endereços | Admin |
 | `GET` | `/enderecos/:id` | Busca endereço por ID | Admin |
+| `GET` | `/enderecos/perfil` | Busca próprio endereço | Cliente/Admin |
 | `POST` | `/enderecos` | Cadastra novo endereço | Admin |
+| `POST` | `/enderecos/perfil` | Cadastra próprio endereço | Cliente/Admin |
 | `PUT` | `/enderecos/:id` | Atualiza endereço | Admin |
+| `PUT` | `/enderecos/perfil/:id` | Atualiza próprio endereço | Cliente/Admin |
 | `DELETE` | `/enderecos/:id` | Remove endereço | Admin |
 
 <details>
-<summary>Ver body — POST</summary>
+<summary>Ver body — POST/PUT</summary>
 
 ```json
 {
@@ -293,7 +300,6 @@ O token carrega o `id` e o `papel` do usuário — `admin` ou `cliente`.
 
 ## 🔧 O que vem por aí
 
-- [ ] Rotas de endereço para o cliente gerenciar os próprios endereços
 - [ ] Histórico de pedidos — `GET /pedidos/historico` retorna entregues e cancelados
 - [ ] Busca de produtos por nome — `GET /produtos?nome=calabresa`
 - [ ] Relatório de vendas — total vendido por dia e produto mais pedido
