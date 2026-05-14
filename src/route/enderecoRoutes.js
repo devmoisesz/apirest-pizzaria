@@ -27,7 +27,7 @@ router.get('/', authMiddleware.autenticarToken,
 
 //Rota pra listar os endereços do usuário autenticado
 router.get('/perfil', authMiddleware.autenticarToken,
-    enderecoController.ListarEnderecoGenciado
+    enderecoController.ListarEnderecoGerenciado
 )
 
 //Rota pra listagem de apenas um endereço requisitado pelo id(Apenas Admin tem acesso)
@@ -51,7 +51,7 @@ router.put('/:id', authMiddleware.autenticarToken,
 
 router.delete('/perfil/:id', 
     authMiddleware.autenticarToken,
-    enderecoController.DeletarEnderecoGenciado
+    enderecoController.DeletarEnderecoGerenciado
 )
 
 //Rota pra deletar apenas um endereço requisitado pelo id(Apenas Admin tem acesso)

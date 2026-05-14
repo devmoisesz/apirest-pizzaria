@@ -39,10 +39,10 @@ async function ListarEnderecos(req, res, next) {
     }
 }
 
-async function ListarEnderecoGenciado(req, res, next) {
+async function ListarEnderecoGerenciado(req, res, next) {
     try {
         const usuarioId = req.usuario.id
-        const endereco = await enderecoService.ListarEnderecoGenciado(usuarioId)
+        const endereco = await enderecoService.ListarEnderecoGerenciado(usuarioId)
         res.status(200).json(endereco)
     } catch (error) {
         next(error)
@@ -82,11 +82,11 @@ async function EditarEndereco(req, res, next) {
     }
 }
 
-async function DeletarEnderecoGenciado(req, res, next) {
+async function DeletarEnderecoGerenciado(req, res, next) {
     try {
         const idUsuario = req.usuario.id
         const idEndereco = req.params.id
-        await enderecoService.DeletarEnderecoGenciado(idUsuario, idEndereco)
+        await enderecoService.DeletarEnderecoGerenciado(idUsuario, idEndereco)
         res.status(200).json({mensagem: "Deletado com sucesso!"})
     } catch (error) {
         next(error)
@@ -104,4 +104,4 @@ async function DeletarEndereco(req, res, next) {
 }
 
 //exportação das funções
-export default {CadastrarEnderecos, CadastrarEnderecosPerfil, ListarEnderecos, ListarEndereco, ListarEnderecoGenciado, EditarEnderecoGerenciado, EditarEndereco, DeletarEnderecoGenciado, DeletarEndereco}
+export default {CadastrarEnderecos, CadastrarEnderecosPerfil, ListarEnderecos, ListarEndereco, ListarEnderecoGerenciado, EditarEnderecoGerenciado, EditarEndereco, DeletarEnderecoGerenciado, DeletarEndereco}

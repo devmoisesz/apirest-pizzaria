@@ -28,7 +28,7 @@ function ValidarCadastro(req, res, next){
     next()
 }
 
-function ValidarEdiçãoDePedido(req, res, next){
+function ValidarEdicaoDePedido(req, res, next){
     const cadastro = schemaOpcional.safeParse(req.body)
     //Verificar dados
     if(!cadastro.success){
@@ -43,4 +43,4 @@ function ValidarEdiçãoDePedido(req, res, next){
     next()
 }
 
-export default {ValidarCadastro, ValidarEdiçãoDePedido}
+export default {ValidarCadastro, ValidarEdicaoDePedido}

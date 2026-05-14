@@ -25,7 +25,7 @@ router.get('/:id', authMiddleware.autenticarToken,
 //Rota pra editar apenas o pedido requisitado pelo id(Apenas Admin tem acesso)
 router.put('/:id', authMiddleware.autenticarToken, 
     adminMiddleware.apenasAdmin,
-    pedidosMiddleware.ValidarEdiçãoDePedido,
+    pedidosMiddleware.ValidarEdicaoDePedido,
     pedidosController.EditarPedido) 
 
 //Rora pro cliente conseguir cancelar o próprio pedido

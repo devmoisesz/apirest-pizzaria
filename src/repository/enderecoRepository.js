@@ -1,4 +1,3 @@
-import { ru } from "zod/locales";
 import pool from "../../database/db.js";
 
 async function BuscarIDdoUsuario(id) {
@@ -37,7 +36,7 @@ async function ListarEndereco(id) {
     return rows[0]
 }
 
-async function ListarEnderecoGenciado(idUser) {
+async function ListarEnderecoGerenciado(idUser) {
      const {rows} = await pool.query(`
         SELECT * FROM enderecos WHERE user_id = $1
     `,[idUser])
@@ -57,7 +56,7 @@ async function EditarEnderecoGerenciado(idUser, idEndereco, cidade, rua, numero,
             cep = $6
         WHERE id = $7 AND user_id = $8 RETURNING *
     `,[cidade, rua, numero, bairro, complemento, cep, idEndereco, idUser])
-    return rows
+    return rows[0]
 }
 
 async function EditarEndereco(id, cidade, rua, numero, bairro, complemento, cep) {
@@ -87,7 +86,7 @@ async function DeletarEndereco(id) {
 
 export default {BuscarIDdoUsuario, 
     CadastrarEnderecos, ListarEnderecos, 
-    ListarEnderecoGenciado, BuscarIDdoEndereco, 
+    ListarEnderecoGerenciado, BuscarIDdoEndereco, 
     ListarEndereco, EditarEnderecoGerenciado, 
     EditarEndereco, DeletarEnderecoGenciado, 
     DeletarEndereco

@@ -18,7 +18,7 @@ async function ListarEndereco(id) {
     return await enderecoRepository.ListarEndereco(id)
 }
 
-async function ListarEnderecoGenciado(idUser) {
+async function ListarEnderecoGerenciado(idUser) {
     const userId = await enderecoRepository.BuscarIDdoUsuario(idUser)
     if(!userId) throw new Error("Usuário não Encontrado!")
     const endereco = await enderecoRepository.ListarEnderecoGenciado(idUser)
@@ -40,7 +40,7 @@ async function EditarEndereco(id, cidade, rua, numero, bairro, complemento, cep)
     return await enderecoRepository.EditarEndereco(id, cidade, rua, numero, bairro, complemento, cep)
 }
 
-async function DeletarEnderecoGenciado(idUsuario, idEndereco) {
+async function DeletarEnderecoGerenciado(idUsuario, idEndereco) {
     const enderecoId = await enderecoRepository.BuscarIDdoEndereco(idEndereco)
     if(!enderecoId) throw new Error("Endereço não Encontrado!")
     return await enderecoRepository.DeletarEnderecoGenciado(idUsuario, idEndereco)
@@ -52,4 +52,4 @@ async function DeletarEndereco(id) {
     return await enderecoRepository.DeletarEndereco(id)
 }
 
-export default {CadastrarEnderecos, ListarEnderecos, ListarEndereco, ListarEnderecoGenciado, EditarEnderecoGerenciado, EditarEndereco, DeletarEnderecoGenciado, DeletarEndereco}
+export default {CadastrarEnderecos, ListarEnderecos, ListarEndereco, ListarEnderecoGerenciado, EditarEnderecoGerenciado, EditarEndereco, DeletarEnderecoGerenciado, DeletarEndereco}
