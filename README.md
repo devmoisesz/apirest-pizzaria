@@ -21,9 +21,9 @@
 
 Este projeto nasceu como um exercício prático de desenvolvimento backend. A ideia foi simples: construir uma API real, com todas as dores e decisões que um desenvolvedor encontra no dia a dia.
 
-Ao longo do desenvolvimento foram tomadas decisões de arquitetura, modelagem de banco de dados, segurança com autenticação JWT, controle de acesso por papel (admin/cliente), validação de dados com Zod.
+Ao longo do desenvolvimento foram tomadas decisões de arquitetura, modelagem de banco de dados, segurança com autenticação JWT, controle de acesso por papel (admin/cliente), validação de dados com Zod e gerenciamento de permissões granulares para operações sensíveis.
 
-O resultado é uma API capaz de gerenciar usuários, cardápio, pedidos e endereços de uma pizzaria do mundo real.
+O resultado é uma API capaz de gerenciar usuários, cardápio, pedidos e endereços de uma pizzaria do mundo real, com suporte completo para que clientes gerenciem seus próprios dados de forma segura.
 
 ---
 
@@ -110,7 +110,7 @@ O token carrega o `id` e o `papel` do usuário — `admin` ou `cliente`.
 **Cliente autenticado** — precisam de token:
 - `GET /usuarios/perfil` — ver próprio perfil
 - `PUT /usuarios/perfil` — editar próprio perfil
-- `DELETE /usuarios/perfil` — deletar próprio cadastro (com verificação de senha)
+- `DELETE /usuarios/perfil` — deletar próprio cadastro
 - `POST /pedidos` — fazer pedido
 - `DELETE /pedidos/perfil/:id` — cancelar próprio pedido (só se pendente)
 - `GET /enderecos/perfil` — ver próprio endereço
