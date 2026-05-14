@@ -28,7 +28,7 @@ const LerProdutoPorId = async(id)=>{
 
 const editarProduto = async(id, name_product, price, description, category_id)=>{
     //Verificar se o id requisitado existe
-    const idproduct = await productRepository.verificar(id)
+    const idproduct = await productRepository.productPorId(id)
     if(!idproduct) throw new Error("Produto não encontrado!")
     //Busca na tabela categoria o id da categoria do produto pra verificar se a categoria existe
     const idcategoria = await categoryRepository.listarPorId(category_id) 
@@ -39,7 +39,7 @@ const editarProduto = async(id, name_product, price, description, category_id)=>
 
 const deletarProduto = async(id)=>{
     //Verificar se o id requisitado existe
-    const idproduct = await productRepository.verificar(id)
+    const idproduct = await productRepository.productPorId(id)
     if(!idproduct) throw new Error("Produto não encontrado!")
     return productRepository.deletarProduto(id)
 }

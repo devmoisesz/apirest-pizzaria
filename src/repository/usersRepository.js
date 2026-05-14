@@ -39,7 +39,7 @@ const listar = async() =>{
 const buscarPorId = async(id) =>{
     //Lista apenas usuário requisitado pelo id
     const {rows} = await pool.query(`
-        SELECT nome, email, senha FROM users WHERE id = $1
+        SELECT nome, email FROM users WHERE id = $1
         `,[id])
     return rows[0]
 }

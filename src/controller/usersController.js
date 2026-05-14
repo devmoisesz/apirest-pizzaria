@@ -1,5 +1,4 @@
 //Contraller faz as requisições do servidor e responde
-import { json } from 'zod'
 import usersService from '../service/usersService.js'
 
 const cadastrar = async(req, res, next) => {

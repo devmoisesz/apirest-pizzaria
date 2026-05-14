@@ -21,7 +21,7 @@ async function ListarEndereco(id) {
 async function ListarEnderecoGerenciado(idUser) {
     const userId = await enderecoRepository.BuscarIDdoUsuario(idUser)
     if(!userId) throw new Error("Usuário não Encontrado!")
-    const endereco = await enderecoRepository.ListarEnderecoGenciado(idUser)
+    const endereco = await enderecoRepository.ListarEnderecoGerenciado(idUser)
     if(!endereco) throw new Error("Endereço não Encontrado!")
     return endereco
 }

@@ -20,7 +20,7 @@ const schemaEnderecoEditado = z.object({
 })
 
 const schemaEnderecoGerenciado = z.object({
-    ser_id: z.number().int().optional(),
+    user_id: z.number().int().optional(),
     cidade: z.string('Valor inválido. O campo cidade deve conter texto.').min(3).max(40),
     rua: z.string('Valor inválido. O campo rua deve conter texto.').max(40),
     numero: z.string('Valor inválido. O campo número deve conter texto.').max(10),

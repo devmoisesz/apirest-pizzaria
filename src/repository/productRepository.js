@@ -38,15 +38,6 @@ const productPorId = async(id)=>{
     return rows[0]
 }
 
-//Verifica no banco o Id pra verificação no service
-const verificar = async(id)=>{
-    const {rows} = await pool.query(
-        'SELECT * FROM products WHERE id = $1',
-        [id]
-    )
-    return rows[0]
-}
-
 //Edita o produto requisitado
 const editarProduto = async(id, name_product, price, description, category_id)=>{
     const {rows} = await pool.query(
@@ -66,4 +57,4 @@ const deletarProduto = async(id)=>{
     return rows[0]
 }
 
-export default {buscarPorNome, cadastrar, Listar, productPorId, verificar, editarProduto, deletarProduto}
+export default {buscarPorNome, cadastrar, Listar, productPorId, editarProduto, deletarProduto}
