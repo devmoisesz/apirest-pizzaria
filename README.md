@@ -21,7 +21,7 @@
 
 Este projeto nasceu como um exercício prático de desenvolvimento backend. A ideia foi simples: construir uma API real, com todas as dores e decisões que um desenvolvedor encontra no dia a dia.
 
-Ao longo do desenvolvimento foram tomadas decisões de arquitetura, modelagem de banco de dados, segurança com autenticação JWT, controle de acesso por papel (admin/cliente), validação de dados.
+Ao longo do desenvolvimento foram tomadas decisões de arquitetura, modelagem de banco de dados, segurança com autenticação JWT, controle de acesso por papel (admin/cliente), validação de dados com Zod.
 
 O resultado é uma API capaz de gerenciar usuários, cardápio, pedidos e endereços de uma pizzaria do mundo real.
 
@@ -110,16 +110,19 @@ O token carrega o `id` e o `papel` do usuário — `admin` ou `cliente`.
 **Cliente autenticado** — precisam de token:
 - `GET /usuarios/perfil` — ver próprio perfil
 - `PUT /usuarios/perfil` — editar próprio perfil
+- `DELETE /usuarios/perfil` — deletar próprio cadastro (com verificação de senha)
 - `POST /pedidos` — fazer pedido
+- `DELETE /pedidos/perfil/:id` — cancelar próprio pedido (só se pendente)
 - `GET /enderecos/perfil` — ver próprio endereço
 - `POST /enderecos/perfil` — cadastrar próprio endereço
 - `PUT /enderecos/perfil/:id` — editar próprio endereço
-- `DELETE /pedidos/perfil` — cancelar próprio pedido (só se pendente)
+- `DELETE /enderecos/perfil/:id` — deletar próprio endereço
 
 **Apenas Admin** — precisam de token com `papel: admin`:
 - CRUD completo de produtos e categorias
 - Ver todos os usuários, pedidos e endereços
 - Atualizar status de qualquer pedido
+- Gerenciar cadastros de endereços de todos os usuários
 
 ---
 
@@ -137,6 +140,7 @@ O token carrega o `id` e o `papel` do usuário — `admin` ou `cliente`.
 | `GET` | `/usuarios/:id/enderecos` | Lista endereços de um usuário | Admin |
 | `PUT` | `/usuarios/perfil` | Edita perfil do usuário logado | Cliente/Admin |
 | `PUT` | `/usuarios/:id` | Atualiza qualquer usuário | Admin |
+| `DELETE` | `/usuarios/perfil` | Deleta próprio cadastro | Cliente/Admin |
 | `DELETE` | `/usuarios/:id` | Remove usuário | Admin |
 
 <details>
@@ -146,6 +150,16 @@ O token carrega o `id` e o `papel` do usuário — `admin` ou `cliente`.
 {
   "nome": "João Silva",
   "email": "joao@email.com",
+  "senha": "minhasenha123"
+}
+```
+</details>
+
+<details>
+<summary>Ver body — DELETE /usuarios/perfil</summary>
+
+```json
+{
   "senha": "minhasenha123"
 }
 ```
@@ -235,7 +249,7 @@ O token carrega o `id` e o `papel` do usuário — `admin` ou `cliente`.
 | `GET` | `/pedidos/:id` | Busca pedido por ID | Admin |
 | `POST` | `/pedidos` | Cria um novo pedido | Cliente/Admin |
 | `PUT` | `/pedidos/:id` | Atualiza status do pedido | Admin |
-| `DELETE` | `/pedidos/perfil` | Cancela próprio pedido (só se pendente) | Cliente/Admin |
+| `DELETE` | `/pedidos/perfil/:id` | Cancela próprio pedido (só se pendente) | Cliente/Admin |
 | `DELETE` | `/pedidos/:id` | Cancela qualquer pedido | Admin |
 
 <details>
@@ -278,6 +292,7 @@ O token carrega o `id` e o `papel` do usuário — `admin` ou `cliente`.
 | `POST` | `/enderecos/perfil` | Cadastra próprio endereço | Cliente/Admin |
 | `PUT` | `/enderecos/:id` | Atualiza endereço | Admin |
 | `PUT` | `/enderecos/perfil/:id` | Atualiza próprio endereço | Cliente/Admin |
+| `DELETE` | `/enderecos/perfil/:id` | Deleta próprio endereço | Cliente/Admin |
 | `DELETE` | `/enderecos/:id` | Remove endereço | Admin |
 
 <details>
@@ -285,7 +300,6 @@ O token carrega o `id` e o `papel` do usuário — `admin` ou `cliente`.
 
 ```json
 {
-  "user_id": 1,
   "cidade": "São Paulo",
   "rua": "Rua das Flores",
   "numero": "123",
@@ -298,9 +312,91 @@ O token carrega o `id` e o `papel` do usuário — `admin` ou `cliente`.
 
 ---
 
+## 📋 Análise Crítica do Projeto
+
+### ✅ Pontos Fortes
+
+1. **Arquitetura em camadas bem estruturada**
+   - Separação clara de responsabilidades (Routes → Controller → Service → Repository)
+   - Fácil de manter e escalar
+
+2. **Autenticação e Autorização**
+   - JWT implementado corretamente
+   - Controle de acesso por papel (RBAC) bem estruturado
+   - Proteção de dados sensíveis (senhas não retornam em queries)
+
+3. **Validação de dados robusta**
+   - Uso do Zod para validação em todos os middlewares
+   - Schemas bem definidos para cada entidade
+
+4. **Desenvolvimento iterativo**
+   - Múltiplos commits mostrando evolução do projeto
+   - Correção proativa de bugs e refatoração
+
+### ⚠️ Pontos de Atenção
+
+1. **Falta de testes**
+   - Sem testes unitários ou integração
+   - `package.json` não possui scripts de teste configurados
+   - Recomendação: Implementar com Jest/Mocha
+
+2. **Tratamento de erros**
+   - Falta middleware centralizado para tratamento de exceções
+   - Erros genéricos sem códigos de status HTTP padronizados
+   - Recomendação: Criar classe `AppError` e middleware de erro global
+
+3. **Logging e monitoramento**
+   - Nenhum sistema de logging implementado
+   - Difícil diagnosticar problemas em produção
+   - Recomendação: Integrar Winston ou Pino
+
+4. **Validação de integridade referencial**
+   - Algumas queries não verificam FK antes de deletar
+   - Risco de cascade deletes não controlados
+   - Recomendação: Adicionar constraints no banco
+
+5. **Segurança**
+   - Sem rate limiting nas rotas públicas
+   - Sem CORS configurado
+   - Sem proteção contra SQL injection (já usa prepared statements, ✓)
+   - Sem input sanitization adicional
+
+6. **Performance**
+   - Sem paginação nas listagens
+   - Sem cache implementado
+   - Sem índices de banco de dados documentados
+   - Recomendação: Adicionar suporte a offset/limit nas listagens
+
+7. **Documentação**
+   - README melhorado, mas faltam exemplos de erro
+   - Sem OpenAPI/Swagger
+   - Recomendação: Integrar swagger-ui ou OpenAPI
+
+8. **Versionamento de dependências**
+   - Versões com `^` permitem breaking changes
+   - Versão do Express é 5.2.1 (em desenvolvimento)
+   - Recomendação: Usar versões estáveis e fazer lock de versões
+
+### 🎯 Próximos Passos Recomendados
+
+- [ ] Implementar testes automatizados (Jest/Mocha)
+- [ ] Adicionar middleware de tratamento de erros global
+- [ ] Integrar logging centralizado (Winston/Pino)
+- [ ] Implementar paginação nas rotas de listagem
+- [ ] Adicionar rate limiting e CORS
+- [ ] Documentar com Swagger/OpenAPI
+- [ ] Configurar CI/CD (GitHub Actions)
+- [ ] Adicionar validação de variáveis de ambiente
+
+---
+
 ## 🔧 O que vem por aí
 
+- [ ] Testes automatizados (unitários e integração)
 - [ ] Histórico de pedidos — `GET /pedidos/historico` retorna entregues e cancelados
 - [ ] Busca de produtos por nome — `GET /produtos?nome=calabresa`
 - [ ] Relatório de vendas — total vendido por dia e produto mais pedido
-- [ ] Paginação nas listagens
+- [ ] Paginação nas listagens — offset/limit
+- [ ] Rate limiting nas rotas públicas
+- [ ] Logging centralizado
+- [ ] Documentação com Swagger/OpenAPI
