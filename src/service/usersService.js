@@ -52,7 +52,7 @@ async function EnderecoDoUsuario(id) {
 
 async function EditarPerfil(id, {nome, email, senha}) {
     //Procura no banco se já existe alguém com esse email
-    const usuarioComEmail = await usersRepository.buscarUsuarioPorEmail(email)
+    const usuarioComEmail = await usersRepository.BuscarUsuario(email)
     //Verifica se existe usuário com esse email e se o email pertence a outro usuário
     if(usuarioComEmail && usuarioComEmail.id !== id){
         throw new Error('Email já cadastrado')
@@ -81,6 +81,13 @@ const update = async(id, up) =>{
     return usuario
 }
 
+async function DeletarConta(usuarioId, senha) {
+    const usuario = await usersRepository.buscarPorIdCompleto(usuarioId)
+    const senhaValida = await bcrypt.compare(senha, usuario.senha) 
+    if(!senhaValida) throw new Error("Senha inválida!")
+    return await usersRepository.delect(usuarioId)
+}
+
 const deleteUser = async(id)=>{
     //Consulta o banco se o id requisitado pro delete existe
     const usuario = await usersRepository.buscarPorId(id)
@@ -91,4 +98,4 @@ const deleteUser = async(id)=>{
     return usersRepository.delect(id)
 }
 
-export default {cadastrar, listar, listarPorId, update, deleteUser, PedidosDoUsuario, EnderecoDoUsuario, listarDados, EditarPerfil}
+export default {cadastrar, listar, listarPorId, update, deleteUser, PedidosDoUsuario, EnderecoDoUsuario, listarDados, EditarPerfil, DeletarConta}

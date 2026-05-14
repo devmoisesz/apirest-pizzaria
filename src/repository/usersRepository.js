@@ -12,9 +12,9 @@ async function buscarPorEmail(email){
     return rows[0]
 }
 
-async function buscarUsuarioPorEmail(email) {
+async function BuscarUsuario(email) {
     const {rows} = await pool.query(`
-        SELECT * FROM users WHERE email = $1   
+        SELECT * FROM users WHERE email = $1
     `,[email])
     return rows[0]
 }
@@ -39,8 +39,15 @@ const listar = async() =>{
 const buscarPorId = async(id) =>{
     //Lista apenas usuário requisitado pelo id
     const {rows} = await pool.query(`
-        SELECT nome, email FROM users WHERE id = $1
+        SELECT nome, email, senha FROM users WHERE id = $1
         `,[id])
+    return rows[0]
+}
+
+async function buscarPorIdCompleto(id) {
+    const {rows} = await pool.query(
+        'SELECT * FROM users WHERE id = $1', [id]
+    )
     return rows[0]
 }
 
@@ -106,11 +113,6 @@ const delect = async(id) => {
     return rows[0]
 }
 
-async function BuscarUsuario(email) {
-    const {rows} = await pool.query(`
-        SELECT * FROM users WHERE email = $1
-    `,[email])
-    return rows[0]
-}
 
-export default {buscarPorEmail, buscarUsuarioPorEmail, criar, listar, buscarPorId, EnderecoDoUsuario, EditarPerfil, editaUser, delect, BuscarUsuario}
+
+export default {buscarPorEmail, BuscarUsuario, criar, listar, buscarPorId, buscarPorIdCompleto, EnderecoDoUsuario, EditarPerfil, editaUser, delect}

@@ -40,7 +40,7 @@ router.get('/:id/enderecos', authMiddleware.autenticarToken,
     usersController.EnderecoDoUsuario
 ) 
 
-//Rota pra editar os dados do próprio perfil
+//Rota pro cliente editar os dados do próprio perfil
 router.put('/perfil', authMiddleware.autenticarToken,
     usersMiddleware.ValidarEditarPerfil,
     usersController.EditarPerfil
@@ -52,6 +52,11 @@ router.put('/:id', authMiddleware.autenticarToken,
     usersMiddleware.ValidarCadastro, 
     usersController.editarPorId
 ) 
+
+//Rota pro cliente deletar próprio cadastro
+router.delete('/perfil', authMiddleware.autenticarToken,
+    usersController.DeletarConta
+)
 
 //Rota pra deletar usuário(Apenas Admin tem acesso)
 router.delete('/:id', authMiddleware.autenticarToken, 

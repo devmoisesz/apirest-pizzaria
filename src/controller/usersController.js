@@ -1,4 +1,5 @@
 //Contraller faz as requisições do servidor e responde
+import { json } from 'zod'
 import usersService from '../service/usersService.js'
 
 const cadastrar = async(req, res, next) => {
@@ -83,6 +84,17 @@ const editarPorId = async(req, res, next) =>{
     }
 }
 
+async function DeletarConta(req, res, next) {
+    try {
+        const {senha} = req.body
+        const usuarioId = req.usuario.id
+        await usersService.DeletarConta(usuarioId, senha)
+        res.status(200).json({mensagem: 'Conta Deletada!'})
+    } catch (error) {
+        next(error)
+    }
+}
+
 const deleteUser = async(req, res, next)=>{
     try{
         const usuarioId = req.params.id
@@ -93,4 +105,4 @@ const deleteUser = async(req, res, next)=>{
     }
 }
 
-export default {cadastrar, listar, listarPorId, EditarPerfil, editarPorId, deleteUser, PedidosDoUsuario, EnderecoDoUsuario, listarDados}
+export default {cadastrar, listar, listarPorId, EditarPerfil, editarPorId, deleteUser, PedidosDoUsuario, EnderecoDoUsuario, listarDados, DeletarConta}
