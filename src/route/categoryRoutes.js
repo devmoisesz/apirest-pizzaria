@@ -7,7 +7,10 @@ import adminMiddleware from '../middlewares/adminMiddleware.js'
 const router = Router()
 
 //Rota pra validar e cadastro de categorias(Apenas Admin tem acesso)
-router.post('/', authMiddleware.autenticarToken, adminMiddleware.apenasAdmin, categoryMiddleware.VerificarCadastro, categoryController.criarCategoria) 
+router.post('/', authMiddleware.autenticarToken, 
+    adminMiddleware.apenasAdmin, 
+    categoryMiddleware.VerificarCadastro, 
+    categoryController.criarCategoria) 
 
 //Rota pra ler todas categorias cadastradas
 router.get('/', categoryController.listarCategorias) 
@@ -19,7 +22,10 @@ router.get('/:id', categoryController.listarCategoriasPorId)
 router.get('/:id/produtos', categoryController.ProdutoDaCategoria) 
 
 // Rota pra editar categoria (Apenas Admin tem acesso)
-router.put('/:id', authMiddleware.autenticarToken, adminMiddleware.apenasAdmin, categoryMiddleware.VerificarCadastro, categoryController.editar) 
+router.put('/:id', authMiddleware.autenticarToken, 
+    adminMiddleware.apenasAdmin, 
+    categoryMiddleware.VerificarCadastro, 
+    categoryController.editar) 
 
 //Rota pra deletar categorias(Apenas Admin tem acesso)
 router.delete('/:id', authMiddleware.autenticarToken, adminMiddleware.apenasAdmin, categoryController.deletar) 
