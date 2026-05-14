@@ -49,6 +49,11 @@ router.put('/:id', authMiddleware.autenticarToken,
     enderecoController.EditarEndereco
 ) 
 
+router.delete('/perfil/:id', 
+    authMiddleware.autenticarToken,
+    enderecoController.DeletarEnderecoGenciado
+)
+
 //Rota pra deletar apenas um endereço requisitado pelo id(Apenas Admin tem acesso)
 router.delete('/:id', authMiddleware.autenticarToken, 
     adminMiddleware.apenasAdmin, 

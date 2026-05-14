@@ -41,7 +41,7 @@ async function ListarEnderecoGenciado(idUser) {
      const {rows} = await pool.query(`
         SELECT * FROM enderecos WHERE user_id = $1
     `,[idUser])
-    return rows[0]
+    return rows
 }
 
 //Edita endereço de acordo com a condição(id do endereço seja X e também o user_id seja Y)
@@ -68,6 +68,16 @@ async function EditarEndereco(id, cidade, rua, numero, bairro, complemento, cep)
     return rows[0]
 }
 
+async function DeletarEnderecoGenciado(idUsuario, idEndereco) {
+    const {rows} = await pool.query(`
+        DELETE 
+            FROM enderecos
+            WHERE enderecos.id = $1
+            AND user_id = $2
+    `,[idEndereco, idUsuario])
+    return rows[0]
+}
+
 async function DeletarEndereco(id) {
     const {rows} = await pool.query(`
         DELETE FROM enderecos WHERE id = $1
@@ -75,4 +85,10 @@ async function DeletarEndereco(id) {
     return rows[0]
 }
 
-export default {BuscarIDdoUsuario, CadastrarEnderecos, ListarEnderecos, ListarEnderecoGenciado, BuscarIDdoEndereco, ListarEndereco, EditarEnderecoGerenciado, EditarEndereco, DeletarEndereco}
+export default {BuscarIDdoUsuario, 
+    CadastrarEnderecos, ListarEnderecos, 
+    ListarEnderecoGenciado, BuscarIDdoEndereco, 
+    ListarEndereco, EditarEnderecoGerenciado, 
+    EditarEndereco, DeletarEnderecoGenciado, 
+    DeletarEndereco
+}
