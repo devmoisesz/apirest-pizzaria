@@ -31,16 +31,16 @@ async function EditarPedido(id, status) {
     return await pedidosRepository.EditarPedido(id, status)
 }
 
-async function ClienteCancelarPedido(id_user) {
-    //Buscar pedido do usuario requisitado
-    const pedido = await pedidosRepository.BuscarPedidoPorUsuario(id_user)
-    //Verificar se o pedido existe
-    if(!pedido) throw new Error("Pedido não encontrado")
-    
+async function ClienteCancelarPedido(id_user, idPedido) {
+    //Busca pedido de acordo com id do usuario e o id requisitado na url
+    const pedido = await pedidosRepository.BuscarPedidoPorUsuario(id_user, idPedido)
+
+    //Verificar se o pedido requisitado existe
+    if(!pedido) throw new Error("Pedido não encontrado!")
     //Verificar se o pedido está pendente
-    if(pedido.status !== 'pendente') throw new Error("Não é possível cancelar um pedido que não esteja pendente.")
-    
-    return await pedidosRepository.DeletarPedido(pedido.id)
+    if(pedido.status !== 'pendente') throw new Error("Não é possível cancelar um pedido que não esteja pendente.");
+
+    return await pedidosRepository.ClienteCancelarPedido(id_user, idPedido)
 }
 
 async function DeletarPedido(id) {

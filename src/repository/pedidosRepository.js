@@ -16,11 +16,10 @@ const buscaEndereco = async (id)=>{
     return rows[0]
 }
 
-async function BuscarPedidoPorUsuario(id_user) {
+async function BuscarPedidoPorUsuario(id_user, idPedido) {
     const { rows } = await pool.query(`
-        SELECT * FROM pedidos WHERE user_id = $1
-    `,[id_user])
-
+        SELECT * FROM pedidos WHERE user_id = $1 AND pedidos.id = $2
+    `,[id_user, idPedido])
     return rows[0]
 }
 
@@ -153,6 +152,16 @@ async function EditarPedido(id, status) {
     return rows[0]
 }
 
+async function ClienteCancelarPedido(id_user, idPedido) {
+    const {rows} = await pool.query(`
+        DELETE
+            FROM pedidos
+            WHERE pedidos.id = $1
+            AND user_id = $2
+    `,[idPedido, id_user])
+    return rows[0]
+}
+
 async function DeletarPedido(id) {
     const {rows} = await pool.query(`
         DELETE FROM pedidos WHERE pedidos.id = $1
@@ -168,4 +177,4 @@ async function statusPendente(id) {
     return rows[0]
 }
 
-export default {buscaUsuario, buscaEndereco, buscaProduto, Criarpedido, BuscarPedidos, buscarId, buscarPedido, EditarPedido, BuscarPedidoPorUsuario, DeletarPedido, statusPendente, PedidosDoUsuario}
+export default {buscaUsuario, buscaEndereco, buscaProduto, Criarpedido, BuscarPedidos, buscarId, buscarPedido, EditarPedido, BuscarPedidoPorUsuario, ClienteCancelarPedido, DeletarPedido, statusPendente, PedidosDoUsuario}

@@ -43,7 +43,8 @@ async function EditarPedido(req, res, next) {
 async function ClienteCancelarPedido(req, res, next){
     try {
         const id_user = req.usuario.id
-        await pedidosService.ClienteCancelarPedido(id_user)
+        const idPedido = req.params.id
+        const deletar = await pedidosService.ClienteCancelarPedido(id_user, idPedido)
         res.status(200).json({mensagem: "Pedido cancelado com sucesso"})
     } catch (error) {
         next(error)

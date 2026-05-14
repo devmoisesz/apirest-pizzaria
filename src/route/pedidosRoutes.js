@@ -29,7 +29,7 @@ router.put('/:id', authMiddleware.autenticarToken,
     pedidosController.EditarPedido) 
 
 //Rora pro cliente conseguir cancelar o próprio pedido
-router.delete('/perfil',
+router.delete('/perfil/:id',
     authMiddleware.autenticarToken, 
     pedidosController.ClienteCancelarPedido)
 
