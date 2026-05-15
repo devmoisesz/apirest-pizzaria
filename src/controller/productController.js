@@ -14,7 +14,8 @@ const CadastrarProduto = async(req, res, next)=>{
 
 const LerProduto = async(req, res, next)=>{
     try {
-        const products = await productService.LerProduto()
+        const nomeProdutoUrl = req.query.nome
+        const products = await productService.LerProduto(nomeProdutoUrl)
         res.status(200).json(products)
     } catch (error) {
         next(error)

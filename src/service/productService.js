@@ -12,8 +12,13 @@ const CadastrarProduto = async(name_product, price, description, category_id)=>{
     return productRepository.cadastrar(name_product, price, description, category_id)
 }
 
-const LerProduto = async()=>{
-    //Cria um função pro repository retornar todos os produtos cadastrados no banco
+const LerProduto = async(nomeProdutoUrl)=>{
+    //Verifica se requisitaram nome de produto na url pra filtragem
+    if(nomeProdutoUrl){
+        //Se requisitaram consulta o banco pra Listar com filtragem
+        return await productRepository.ListarProdutoFiltrado(nomeProdutoUrl)
+    }
+    //Se não Lista todos produtos
     const products = await productRepository.Listar()
     return products
 }

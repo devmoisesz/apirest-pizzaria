@@ -1,4 +1,5 @@
 //Repository consulta o banco pra atender as requisições do usuário
+import { includes } from "zod";
 import pool from "../../database/db.js";
 
 //rows é um array que guarda o resultado da consulta SQL
@@ -21,11 +22,39 @@ const cadastrar = async(name_product, price, description, category_id)=>{
     return rows[0]
 }
 
+async function ListarProdutoFiltrado(nomeProdutoUrl) {
+    //Adiciona % antes e depois do nome para buscar produtos que contenham o texto informado
+    nomeProdutoUrl = "%" + nomeProdutoUrl + "%"
+    const {rows} = await pool.query(`
+        SELECT
+            name_product, 
+            price, 
+            description, 
+            json_agg(json_build_object(
+                'nome', categoria.nome
+            )) AS categoria
+        FROM products
+        JOIN categoria ON categoria.id = products.category_id
+        WHERE name_product ILIKE $1
+        GROUP BY name_product, price, description, category_id
+    `,[nomeProdutoUrl])
+    return rows
+}
+
 //Lista todos os produtos cadastrados
 const Listar = async()=>{
-    const {rows} = await pool.query(
-        'SELECT * FROM products'
-    )
+    const {rows} = await pool.query(`
+        SELECT 
+            name_product, 
+            price, 
+            description, 
+            json_agg(json_build_object(
+                'nome', categoria.nome
+            )) AS categoria
+        FROM products
+        JOIN categoria ON categoria.id = products.category_id
+        GROUP BY name_product, price, description, category_id
+    `)
     return rows
 }
 
@@ -57,4 +86,4 @@ const deletarProduto = async(id)=>{
     return rows[0]
 }
 
-export default {buscarPorNome, cadastrar, Listar, productPorId, editarProduto, deletarProduto}
+export default {buscarPorNome, cadastrar, ListarProdutoFiltrado, Listar, productPorId, editarProduto, deletarProduto}
