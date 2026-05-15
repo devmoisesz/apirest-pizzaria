@@ -153,11 +153,13 @@ async function EditarPedido(id, status) {
 }
 
 async function ClienteCancelarPedido(id_user, idPedido) {
+    //muda o status do pedido pra 'cancelado'
     const {rows} = await pool.query(`
-        DELETE
-            FROM pedidos
+        UPDATE pedidos
+            SET status = 'cancelado'
             WHERE pedidos.id = $1
             AND user_id = $2
+            RETURNING *
     `,[idPedido, id_user])
     return rows[0]
 }
