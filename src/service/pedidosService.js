@@ -1,3 +1,4 @@
+import { json } from 'zod'
 import pedidosRepository from '../repository/pedidosRepository.js'
 
 async function Criarpedido(user_id, endereco_id, itens) {
@@ -13,6 +14,12 @@ async function Criarpedido(user_id, endereco_id, itens) {
         }))
 
     return await pedidosRepository.Criarpedido(user_id, endereco_id, itens)
+}
+
+async function ListarHistorico(idCliente) {
+    const pedidosHistorico = await pedidosRepository.ListarHistorico(idCliente)
+    if(pedidosHistorico.length === 0) return []
+    return pedidosHistorico
 }
 
 async function listarPedidos() {
@@ -51,4 +58,4 @@ async function DeletarPedido(id) {
     return await pedidosRepository.DeletarPedido(id)
 }
 
-export default {Criarpedido, listarPedidos, listarPorId, EditarPedido, ClienteCancelarPedido, DeletarPedido}
+export default {Criarpedido, ListarHistorico, listarPedidos, listarPorId, EditarPedido, ClienteCancelarPedido, DeletarPedido}

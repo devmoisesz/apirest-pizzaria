@@ -17,6 +17,11 @@ router.get('/', authMiddleware.autenticarToken,
     adminMiddleware.apenasAdmin,
     pedidosController.listarPedidos) 
 
+//Rota pra listar o histórico de pedidos(entregue ou cancelado) do cliente
+router.get('/historico', authMiddleware.autenticarToken,
+    pedidosController.ListarHistorico
+)
+
 //Rota pra listar apenas o pedido requisitado pelo id(Apenas Admin tem acesso)
 router.get('/:id', authMiddleware.autenticarToken, 
     adminMiddleware.apenasAdmin,

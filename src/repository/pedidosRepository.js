@@ -51,6 +51,23 @@ async function Criarpedido(user_id, endereco_id, itens) {
     return pedidoAtualizado[0]
 }
 
+async function ListarHistorico(idCliente) {
+    const {rows} = await pool.query(`
+        SELECT
+            products.name_product,
+            order_itens.quantity,
+            pedidos.total,
+            pedidos.status
+        FROM pedidos
+        JOIN order_itens ON pedidos.id = order_itens.order_id
+        JOIN products ON order_itens.product_id = products.id
+        WHERE user_id = $1
+        AND (pedidos.status = 'entregue' OR pedidos.status = 'cancelado')
+        GROUP BY products.name_product, order_itens.quantity, pedidos.total, pedidos.status
+    `,[idCliente])
+    return rows
+}
+
 async function BuscarPedidos() {
     const {rows} = await pool.query(`
         SELECT 
@@ -179,4 +196,4 @@ async function statusPendente(id) {
     return rows[0]
 }
 
-export default {buscaUsuario, buscaEndereco, buscaProduto, Criarpedido, BuscarPedidos, buscarId, buscarPedido, EditarPedido, BuscarPedidoPorUsuario, ClienteCancelarPedido, DeletarPedido, statusPendente, PedidosDoUsuario}
+export default {buscaUsuario, buscaEndereco, buscaProduto, Criarpedido, ListarHistorico, BuscarPedidos, buscarId, buscarPedido, EditarPedido, BuscarPedidoPorUsuario, ClienteCancelarPedido, DeletarPedido, statusPendente, PedidosDoUsuario}
