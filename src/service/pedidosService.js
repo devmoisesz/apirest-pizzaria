@@ -1,4 +1,3 @@
-import { json } from 'zod'
 import pedidosRepository from '../repository/pedidosRepository.js'
 
 async function Criarpedido(user_id, endereco_id, itens) {
@@ -21,6 +20,19 @@ async function ListarHistorico(idCliente) {
     if(pedidosHistorico.length === 0) return []
     return pedidosHistorico
 }
+
+async function listarPedidoCliente(idCliente, idPedido) {
+    // valida se o pedido existe
+    const id_pedido = await pedidosRepository.buscarId(idPedido)
+    if(!id_pedido) throw new Error("Pedido não encontrado")
+
+    // valida se o pedido pertence ao cliente
+    const pedido = await pedidosRepository.listarPedidoCliente(idCliente, idPedido)
+    if(!pedido) throw new Error("Pedido não encontrado")
+
+    return pedido
+}
+
 
 async function listarPedidos() {
     return await pedidosRepository.BuscarPedidos()
@@ -58,4 +70,4 @@ async function DeletarPedido(id) {
     return await pedidosRepository.DeletarPedido(id)
 }
 
-export default {Criarpedido, ListarHistorico, listarPedidos, listarPorId, EditarPedido, ClienteCancelarPedido, DeletarPedido}
+export default {Criarpedido, ListarHistorico, listarPedidoCliente, listarPedidos, listarPorId, EditarPedido, ClienteCancelarPedido, DeletarPedido}

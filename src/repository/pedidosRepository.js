@@ -68,6 +68,24 @@ async function ListarHistorico(idCliente) {
     return rows
 }
 
+async function listarPedidoCliente(idCliente, idPedido) {
+    const {rows} = await pool.query(`
+       SELECT
+            products.name_product,
+            order_itens.quantity,
+            pedidos.total,
+            pedidos.status
+        FROM pedidos
+        JOIN order_itens ON pedidos.id = order_itens.order_id
+        JOIN products ON order_itens.product_id = products.id
+        WHERE pedidos.user_id = $1 
+        AND pedidos.id = $2
+        GROUP BY products.name_product, order_itens.quantity, pedidos.total, pedidos.status
+    `,[idCliente, idPedido])
+    return rows[0]
+}
+
+
 async function BuscarPedidos() {
     const {rows} = await pool.query(`
         SELECT 
@@ -196,4 +214,9 @@ async function statusPendente(id) {
     return rows[0]
 }
 
-export default {buscaUsuario, buscaEndereco, buscaProduto, Criarpedido, ListarHistorico, BuscarPedidos, buscarId, buscarPedido, EditarPedido, BuscarPedidoPorUsuario, ClienteCancelarPedido, DeletarPedido, statusPendente, PedidosDoUsuario}
+export default {buscaUsuario, buscaEndereco, buscaProduto, 
+    Criarpedido, ListarHistorico, listarPedidoCliente, 
+    BuscarPedidos, buscarId, buscarPedido, 
+    EditarPedido, BuscarPedidoPorUsuario, ClienteCancelarPedido, 
+    DeletarPedido, statusPendente, PedidosDoUsuario
+}

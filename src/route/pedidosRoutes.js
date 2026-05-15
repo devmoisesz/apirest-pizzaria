@@ -22,6 +22,11 @@ router.get('/historico', authMiddleware.autenticarToken,
     pedidosController.ListarHistorico
 )
 
+//Rota pro cliente ler seu próprio pedido
+router.get('/perfil/:id', authMiddleware.autenticarToken,
+    pedidosController.listarPedidoCliente,
+)
+
 //Rota pra listar apenas o pedido requisitado pelo id(Apenas Admin tem acesso)
 router.get('/:id', authMiddleware.autenticarToken, 
     adminMiddleware.apenasAdmin,

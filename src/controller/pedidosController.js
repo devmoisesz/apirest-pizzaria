@@ -20,6 +20,17 @@ async function ListarHistorico(req, res, next) {
     }
 }
 
+async function listarPedidoCliente(req, res, next) {
+    try {
+        const idCliente = req.usuario.id
+        const idPedido = req.params.id
+        const pedido = await pedidosService.listarPedidoCliente(idCliente, idPedido)
+        res.status(200).json(pedido)
+    } catch (error) {
+        next(error)
+    }
+}
+
 async function listarPedidos(req, res, next) {
         try {
             const pedidos = await pedidosService.listarPedidos()
@@ -71,4 +82,4 @@ async function DeletarPedido(req, res, next) {
     }
 }
 
-export default {Criarpedido, listarPedidos, ListarHistorico, listarPedidosPorId, EditarPedido, ClienteCancelarPedido, DeletarPedido}
+export default {Criarpedido, listarPedidos, ListarHistorico, listarPedidoCliente, listarPedidosPorId, EditarPedido, ClienteCancelarPedido, DeletarPedido}
