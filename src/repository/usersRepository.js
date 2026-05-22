@@ -95,11 +95,11 @@ async function EditarPerfil(id, {nome, email, senha}) {
     return rows[0]
 }
 
-const editaUser = async(id, up) =>{
+const editaUser = async(id, nome, email, senha) =>{
     //Atualiza dados do usuário
     const {rows} = await pool.query(
         'UPDATE users SET nome = $1, email = $2, senha = $3 WHERE id = $4 RETURNING *',
-        [up.nome, up.email, up.senha, id]
+        [nome, email, senha, id]
     )
     return rows[0]
 }

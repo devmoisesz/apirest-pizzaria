@@ -71,11 +71,11 @@ async function EditarPerfil(id, {nome, email, senha}) {
     })
 }
 
-const update = async(id, up) =>{
-    const jaExiste = await usersRepository.buscarPorEmail(up.email)
+const update = async(id, nome, email, senha) =>{
+    const jaExiste = await usersRepository.buscarPorEmail(email)
     if(jaExiste) throw new Error('Email já cadastrado')
     //Verifica pra edição se o usuário existe no banco e atualiza as alterações no banco
-    const usuario = await usersRepository.editaUser(id, up)
+    const usuario = await usersRepository.editaUser(id, nome, email, senha)
     if(!usuario) throw new Error('Usuário não encontrado')
     //Retorna usuario editado
     return usuario

@@ -49,7 +49,7 @@ router.put('/perfil', authMiddleware.autenticarToken,
 //Rota pra editar dados do usuário(Apenas Admin tem acesso)
 router.put('/:id', authMiddleware.autenticarToken, 
     adminMiddleware.apenasAdmin, 
-    usersMiddleware.ValidarCadastro, 
+    usersMiddleware.ValidarEditarPerfil, 
     usersController.editarPorId
 ) 
 
