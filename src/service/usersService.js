@@ -25,32 +25,56 @@ const listar = async() => {
 const listarPorId = async(id) =>{
     //Verificar se o usuário requisitado existe no banco
     const usuario = await usersRepository.buscarPorId(id)
-    if(!usuario) throw new Error('Usuário não encontrado')
+    if(!usuario) {
+        const error = new Error('Usuário não encontrado')
+        error.status = 404
+        throw error
+    }
     //Depois da Verificação, retornar o usuário requisitado
     return usuario
 }
 
 async function listarDados(id) {
     const usuario = await usersRepository.buscarPorId(id)
-    if(!usuario) throw new Error('Usuário não encontrado')
+    if(!usuario) {
+        const error = new Error('Usuário não encontrado')
+        error.status = 404
+        throw error
+    }
     return usuario
 }
 
 async function PedidosDoUsuario(id) {
     //Verificar se o usuário requisitado existe no banco
     const usuario = await usersRepository.buscarPorId(id)
-    if(!usuario) throw new Error('Usuário não encontrado')
+    if(!usuario) {
+        const error = new Error('Usuário não encontrado')
+        error.status = 404
+        throw error
+    }
     const pedidos = await pedidosRepository.PedidosDoUsuario(id)
     //verificar se o usuário requisitado tem pedidos cadastrados
-    if(!pedidos || pedidos.length === 0) throw new Error("Usuário sem pedidos")
+    if(!pedidos || pedidos.length === 0) {
+        const error = new Error('Usuário sem pedidos')
+        error.status = 404
+        throw error
+    } 
     return pedidos
 }
 
 async function EnderecoDoUsuario(id) {
     const usuario = await usersRepository.buscarPorId(id)
-    if(!usuario) throw new Error('Usuário não encontrado')
+    if(!usuario) {
+        const error = new Error('Usuário não encontrado')
+        error.status = 404
+        throw error
+    }
     const endereco = await usersRepository.EnderecoDoUsuario(id)
-    if(!endereco || endereco.length === 0) throw new Error("Usuário sem endereço cadastrado")
+    if(!endereco || endereco.length === 0) {
+        const error = new Error('Usuário sem endereço cadastrado')
+        error.status = 404
+        throw error
+    } 
     return endereco
 }
 
@@ -59,7 +83,9 @@ async function atualizarUsuario(id, dados) {
     const usuarioAtual = await usersRepository.buscarPorId(id)
     
     if (!usuarioAtual) {
-        throw new Error('Usuário não encontrado')
+        const error = new Error('Usuário não encontrado')
+        error.status = 404
+        throw error
     }
 
     const emailAtual = dados.email || usuarioAtual.email
@@ -67,7 +93,9 @@ async function atualizarUsuario(id, dados) {
     const usuarioComEmail = await usersRepository.buscarPorEmail(emailAtual)
     
     if(usuarioComEmail && usuarioComEmail.id !== Number(id)) {
-        throw new Error('Email já cadastrado')
+        const error = new Error('Email já cadastrado!')
+        error.status = 400
+        throw error
     }
     
     let senhaHash
@@ -94,18 +122,28 @@ async function AdmEditarUser(id, dados) {
 async function DeletarConta(usuarioId, senha) {
     const usuario = await usersRepository.buscarPorIdCompleto(usuarioId)
     const senhaValida = await bcrypt.compare(senha, usuario.senha) 
-    if(!senhaValida) throw new Error("Senha inválida!")
+    if(!senhaValida) {
+        const error = new Error('Senha inválida!')
+        error.status = 401
+        throw error
+    }
     return await usersRepository.delect(usuarioId)
 }
 
 async function deleteUser (id){
     const usuario = await usersRepository.buscarPorId(id)
-    if(!usuario) throw new Error('Usuário não encontrado')
+    if(!usuario) {
+        const error = new Error('Usuário não encontrado')
+        error.status = 404
+        throw error
+    }
     
     // Verificar pedidos pendentes
     const pedidosPendentes = await pedidosRepository.pedidosPorUsuario(id, 'pendente')
     if(pedidosPendentes.length > 0) {
-        throw new Error('Não é possível deletar usuário com pedidos pendentes')
+        const error = new Error('Não é possível deletar usuário com pedidos pendentes')
+        error.status = 409
+        throw error
     }
     
     return usersRepository.delect(id)
