@@ -6,7 +6,7 @@ import pool from "../../database/db.js";
 async function buscarPorEmail(email){
     //Busca email pra verificação de email já cadastrado
     const {rows} = await pool.query(
-        'SELECT email FROM users WHERE email = $1',
+        'SELECT * FROM users WHERE email = $1',
         [email]
     )
     return rows[0]
@@ -103,19 +103,25 @@ async function EditarPerfil(id, {nome, email, senha}) {
     return rows[0]
 }
 
-const editaUser = async(id, nome, email, senha) =>{
+async function editaUser(id, {nome, email, senha}){
     //Atualiza dados do usuário de forma parcial (evita setar NULL em colunas NOT NULL)
     if(senha){
-        const {rows} = await pool.query(
-            'UPDATE users SET nome = $1, email = $2, senha = $3 WHERE id = $4 RETURNING *',
-            [nome, email, senha, id]
-        )
+        const {rows} = await pool.query(`
+            UPDATE users 
+            SET nome = $1, email = $2, senha = $3 
+            WHERE id = $4 
+            RETURNING id, nome, email
+        `,[nome, email, senha, id])
+
         return rows[0]
     }
 
-    const {rows} = await pool.query(
-        'UPDATE users SET nome = $1, email = $2 WHERE id = $3 RETURNING *',
-        [nome, email, id]
+    const {rows} = await pool.query(`
+        UPDATE users 
+        SET nome = $1, email = $2 
+        WHERE id = $3 
+        RETURNING id, nome, email
+        `,[nome, email, id]
     )
     return rows[0]
 }

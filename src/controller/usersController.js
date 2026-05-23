@@ -76,7 +76,7 @@ const editarPorId = async(req, res, next) =>{
     try{
         const usuarioId = req.params.id
         const {nome, email, senha} = req.body
-        const userEditado = await usersService.update(usuarioId, { nome, email, senha })
+        const userEditado = await usersService.AdmEditarUser(usuarioId, { nome, email, senha })
         res.status(200).json(userEditado)
     }catch(error){
         next(error)
