@@ -15,7 +15,7 @@ router.post('/', authMiddleware.autenticarToken,
 
 //Rota pra cadastrar um novo endereço no próprio perfil
 router.post('/perfil', authMiddleware.autenticarToken,
-    enderecoMiddleware.VerificarEnderecoGenciado,
+    enderecoMiddleware.VerificarEnderecoGerenciado,
     enderecoController.CadastrarEnderecosPerfil,
 )
 

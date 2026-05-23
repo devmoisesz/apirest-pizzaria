@@ -58,7 +58,7 @@ function VerificarEnderecoEditado(req, res, next) {
     next()
 }
 
-function VerificarEnderecoGenciado(req, res, next){
+function VerificarEnderecoGerenciado(req, res, next){
     const cadastro = schemaEnderecoGerenciado.safeParse(req.body)
     //verificar dados
     if(!cadastro.success){
@@ -72,4 +72,4 @@ function VerificarEnderecoGenciado(req, res, next){
     next()
 }
 
-export default {VerificarCadastro, VerificarEnderecoEditado, VerificarEnderecoGenciado}
+export default {VerificarCadastro, VerificarEnderecoEditado, VerificarEnderecoGerenciado}
