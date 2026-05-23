@@ -6,8 +6,16 @@ const CadastrarProduto = async(name_product, price, description, category_id)=>{
     const jaExiste = await productRepository.buscarPorNome(name_product) //Busca no banco se já existe produto com mesmo nome
     const idcategoria = await categoryRepository.listarPorId(category_id) //Busca na tabela categoria o id da categoria do produto pra verificar se a categoria existe
    //Verificações
-    if(!idcategoria) throw new Error("Categoria não encontrada!")
-    if(jaExiste) throw new Error("Produto já cadastrado!")
+    if(!idcategoria) {
+        const error = new Error('Categoria não encontrada!')
+        error.status = 404
+        throw error
+    }
+    if(jaExiste) {
+        const error = new Error('Produto já cadastrado!')
+        error.status = 400
+        throw error
+    }
     //Retorna pro controller responder o produto cadastrado
     return productRepository.cadastrar(name_product, price, description, category_id)
 }
@@ -27,17 +35,29 @@ const LerProdutoPorId = async(id)=>{
     //Função pro repository retornar apenas o produto requisitado
     const product = await productRepository.productPorId(id)
     //Se o produto não for encontrado
-    if(!product) throw new Error("Produto não encontrado!")
+    if(!product) {
+        const error = new Error('Produto não encontrado!')
+        error.status = 404
+        throw error
+    }
     return(product)
 }
 
 const editarProduto = async(id, name_product, price, description, category_id)=>{
     //Verificar se o id requisitado existe
     const idproduct = await productRepository.productPorId(id)
-    if(!idproduct) throw new Error("Produto não encontrado!")
+    if(!idproduct) {
+        const error = new Error('Produto não encontrado!')
+        error.status = 404
+        throw error
+    }
     //Busca na tabela categoria o id da categoria do produto pra verificar se a categoria existe
     const idcategoria = await categoryRepository.listarPorId(category_id) 
-    if(!idcategoria) throw new Error("Categoria não encontrada")
+    if(!idcategoria) {
+        const error = new Error('Categoria não encontrada!')
+        error.status = 404
+        throw error
+    }
     //Retorna o produto editado
     return productRepository.editarProduto(id, name_product, price, description, category_id)
 }
@@ -45,7 +65,11 @@ const editarProduto = async(id, name_product, price, description, category_id)=>
 const deletarProduto = async(id)=>{
     //Verificar se o id requisitado existe
     const idproduct = await productRepository.productPorId(id)
-    if(!idproduct) throw new Error("Produto não encontrado!")
+    if(!idproduct) {
+        const error = new Error('Produto não encontrado!')
+        error.status = 404
+        throw error
+    }
     return productRepository.deletarProduto(id)
 }
 

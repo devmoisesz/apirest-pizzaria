@@ -4,9 +4,17 @@ import jwt from 'jsonwebtoken'
 
 async function Login(email, senha) {
     const usuario = await usersRepository.BuscarUsuario(email)
-    if(!usuario) throw new Error("Email não encontrado!")
+    if(!usuario) {
+        const error = new Error('Email não encontrado!')
+        error.status = 404
+        throw error
+    }
     const senhaValida = await bcrypt.compare(senha, usuario.senha)
-    if(!senhaValida) throw new Error("Senha Inválida!")
+    if(!senhaValida) {
+        const error = new Error('Senha inválida!')
+        error.status = 401
+        throw error
+    }
     const token = jwt.sign(
     { id: usuario.id, papel: usuario.papel }, 
     process.env.JWT_SECRET,       
