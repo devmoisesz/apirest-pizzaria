@@ -73,33 +73,49 @@ async function EnderecoDoUsuario(id) {
 }
 
 async function EditarPerfil(id, {nome, email, senha}) {
+    // Atualiza parcialmente evitando setar NULL em colunas NOT NULL.
+    // Se email não vier, usamos o email atual no banco.
+    let emailAtual = email
+    if (!emailAtual) {
+        const { rows: rowsAtual } = await pool.query(
+            'SELECT email FROM users WHERE id = $1',
+            [id]
+        )
+        emailAtual = rowsAtual?.[0]?.email
+    }
 
-    //Caso usúario edite a senha
-    if(senha){
-        const {rows} = await pool.query(`
+    if (senha) {
+        const { rows } = await pool.query(`
             UPDATE users
             SET nome = $1, email = $2, senha = $3
             WHERE id = $4 
             RETURNING nome, email
-        `,[nome, email, senha, id])
+        `, [nome, emailAtual, senha, id])
         return rows[0]
     }
 
-    //Caso não edite a senha
-    const {rows} = await pool.query(`
+    const { rows } = await pool.query(`
         UPDATE users
         SET nome = $1, email = $2
         WHERE id = $3
         RETURNING nome, email    
-    `,[nome,email,id])
+    `, [nome, emailAtual, id])
     return rows[0]
 }
 
 const editaUser = async(id, nome, email, senha) =>{
-    //Atualiza dados do usuário
+    //Atualiza dados do usuário de forma parcial (evita setar NULL em colunas NOT NULL)
+    if(senha){
+        const {rows} = await pool.query(
+            'UPDATE users SET nome = $1, email = $2, senha = $3 WHERE id = $4 RETURNING *',
+            [nome, email, senha, id]
+        )
+        return rows[0]
+    }
+
     const {rows} = await pool.query(
-        'UPDATE users SET nome = $1, email = $2, senha = $3 WHERE id = $4 RETURNING *',
-        [nome, email, senha, id]
+        'UPDATE users SET nome = $1, email = $2 WHERE id = $3 RETURNING *',
+        [nome, email, id]
     )
     return rows[0]
 }

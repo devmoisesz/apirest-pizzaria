@@ -51,35 +51,52 @@ async function EnderecoDoUsuario(id) {
 }
 
 async function EditarPerfil(id, {nome, email, senha}) {
-    //Procura no banco se já existe alguém com esse email
-    const usuarioComEmail = await usersRepository.BuscarUsuario(email)
-    //Verifica se existe usuário com esse email e se o email pertence a outro usuário
-    if(usuarioComEmail && usuarioComEmail.id !== id){
+    // Mantém email atual se não foi enviado (evita NULL no NOT NULL)
+    let emailAtual = email
+    if (!emailAtual) {
+        const usuarioAtual = await usersRepository.buscarPorId(id)
+        if (!usuarioAtual) throw new Error('Usuário não encontrado')
+        emailAtual = usuarioAtual.email
+    }
+
+    // Se mandou email (ou mesmo mantendo o atual), valida duplicidade
+    const usuarioComEmail = await usersRepository.BuscarUsuario(emailAtual)
+    if (usuarioComEmail && usuarioComEmail.id !== id) {
         throw new Error('Email já cadastrado')
     }
 
     let senhaHash
-
-    if(senha){
-        senhaHash = await bcrypt.hash(senha, 10) //Criptografa a senha
+    if (senha) {
+        senhaHash = await bcrypt.hash(senha, 10)
+    } else {
+        // garante que não vai atualizar senha para NULL
+        senhaHash = undefined
     }
 
     return await usersRepository.EditarPerfil(id, {
         nome,
-        email,
+        email: emailAtual,
         senha: senhaHash
     })
 }
 
-const update = async(id, nome, email, senha) =>{
+async function update (id, { nome, email, senha }) {
     const jaExiste = await usersRepository.buscarPorEmail(email)
     if(jaExiste) throw new Error('Email já cadastrado')
-    //Verifica pra edição se o usuário existe no banco e atualiza as alterações no banco
-    const usuario = await usersRepository.editaUser(id, nome, email, senha)
+
+    // Se não mandou email, mantém o email atual no banco (evita NULL no NOT NULL)
+    let emailAtual = email
+    if(!emailAtual){
+        const usuarioAtual = await usersRepository.buscarPorId(id)
+        if(!usuarioAtual) throw new Error('Usuário não encontrado')
+        emailAtual = usuarioAtual.email
+    }
+
+    const usuario = await usersRepository.editaUser(id, nome, emailAtual, senha)
     if(!usuario) throw new Error('Usuário não encontrado')
-    //Retorna usuario editado
     return usuario
 }
+
 
 async function DeletarConta(usuarioId, senha) {
     const usuario = await usersRepository.buscarPorIdCompleto(usuarioId)
