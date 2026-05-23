@@ -137,4 +137,7 @@ const delect = async(id) => {
 
 
 
-export default {buscarPorEmail, BuscarUsuario, criar, listar, buscarPorId, buscarPorIdCompleto, EnderecoDoUsuario, EditarPerfil, editaUser, delect}
+export default {buscarPorEmail, BuscarUsuario, 
+    criar, listar, buscarPorId, 
+    buscarPorIdCompleto, EnderecoDoUsuario, 
+    EditarPerfil, editaUser, delect}

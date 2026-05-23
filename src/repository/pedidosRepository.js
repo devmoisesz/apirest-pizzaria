@@ -23,6 +23,19 @@ async function BuscarPedidoPorUsuario(id_user, idPedido) {
     return rows[0]
 }
 
+async function pedidosPorUsuario(user_id, status = null) {
+    let query = 'SELECT id, status FROM pedidos WHERE user_id = $1'
+    let params = [user_id]
+    
+    if (status) {
+        query += ' AND status = $2'
+        params.push(status)
+    }
+    
+    const {rows} = await pool.query(query, params)
+    return rows
+}
+
 const buscaProduto = async (id)=>{
     const {rows} = await pool.query(
         'SELECT * FROM products WHERE id = $1',
@@ -216,7 +229,8 @@ async function statusPendente(id) {
 
 export default {buscaUsuario, buscaEndereco, buscaProduto, 
     Criarpedido, ListarHistorico, listarPedidoCliente, 
-    BuscarPedidos, buscarId, buscarPedido, 
-    EditarPedido, BuscarPedidoPorUsuario, ClienteCancelarPedido, 
-    DeletarPedido, statusPendente, PedidosDoUsuario
+    BuscarPedidos, buscarId, pedidosPorUsuario, 
+    buscarPedido, EditarPedido, BuscarPedidoPorUsuario, 
+    ClienteCancelarPedido, DeletarPedido, 
+    statusPendente, PedidosDoUsuario
 }

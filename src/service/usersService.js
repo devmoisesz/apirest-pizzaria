@@ -94,13 +94,16 @@ async function DeletarConta(usuarioId, senha) {
     return await usersRepository.delect(usuarioId)
 }
 
-const deleteUser = async(id)=>{
-    //Consulta o banco se o id requisitado pro delete existe
+async function deleteUser (id){
     const usuario = await usersRepository.buscarPorId(id)
-    if(!usuario){
-        throw new Error('Usuário não encontrado')
+    if(!usuario) throw new Error('Usuário não encontrado')
+    
+    // Verificar pedidos pendentes
+    const pedidosPendentes = await pedidosRepository.pedidosPorUsuario(id, 'pendente')
+    if(pedidosPendentes.length > 0) {
+        throw new Error('Não é possível deletar usuário com pedidos pendentes')
     }
-    //Retorna pro Controller o delete
+    
     return usersRepository.delect(id)
 }
 
