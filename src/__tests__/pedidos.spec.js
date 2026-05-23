@@ -2,14 +2,14 @@
 //Testar se a API confia no token ou no body
 
 import app from '../../app.js'
-import request from 'supertest'
+import req from 'supertest'
 import 'dotenv/config'
 
 const validToken = process.env.TOKEN_TESTING
 
 describe('POST /pedidos/perfil', () => {
     it('deve criar pedido com user_id do token', async () => {
-        const response = await request(app)
+        const res = await req(app)
             .post('/pedidos/perfil')
             .set('Authorization', `Bearer ${validToken}`)
             .send({
@@ -18,8 +18,7 @@ describe('POST /pedidos/perfil', () => {
                 itens: [{ product_id: 2, quantity: 1 }]
             })
         
-        console.log(response.body)
-        expect(response.status).toBe(201)
-        expect(response.body.user_id).toBe(31)  // ID real, não 999!
+        expect(res.status).toBe(201)
+        expect(res.body.user_id).toBe(31)  // ID real, não 999!
     })
 })

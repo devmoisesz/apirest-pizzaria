@@ -7,7 +7,11 @@ import bcrypt from 'bcryptjs'
 const cadastrar = async ({nome, email, senha}) => {
     //Verificar se o email requisitado já foi cadastrado
     const jaExiste = await usersRepository.buscarPorEmail(email)
-    if(jaExiste) throw new Error('Email já cadastrado')
+    if(jaExiste) {
+        const error = new Error('Email já cadastrado')
+        error.status = 400
+        throw error
+    }
     const hash = await bcrypt.hash(senha, 10)
     //Retornar o cadastro feito
     return usersRepository.criar({nome, email, senha: hash})
