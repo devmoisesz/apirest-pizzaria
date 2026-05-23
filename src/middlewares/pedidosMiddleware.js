@@ -9,7 +9,7 @@ const schema = z.object({
 })
 
 const schemaOpcional = z.object({
-    status: z.string()
+    status: z.enum(['pendente', 'em_preparacao', 'entregue', 'cancelado'])
 })
 
 function ValidarCadastro(req, res, next){
