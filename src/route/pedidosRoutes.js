@@ -7,7 +7,7 @@ import adminMiddleware from '../middlewares/adminMiddleware.js'
 const router = Router()
 
 //Rota pra criar um pedido para o usuário autenticado
-router.post('/', authMiddleware.autenticarToken, 
+router.post('/perfil', authMiddleware.autenticarToken, 
     pedidosMiddleware.ValidarCadastro, 
     pedidosController.Criarpedido
 ) 

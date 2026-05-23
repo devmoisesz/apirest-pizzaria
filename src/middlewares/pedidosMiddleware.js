@@ -1,7 +1,6 @@
 import { z } from 'zod'
 
 const schema = z.object({
-    user_id: z.number().int(),
     endereco_id: z.number().int(),
     itens: z.array(z.object({
         product_id: z.number().int(),

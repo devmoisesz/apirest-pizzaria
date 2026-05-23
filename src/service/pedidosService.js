@@ -1,8 +1,6 @@
 import pedidosRepository from '../repository/pedidosRepository.js'
 
 async function Criarpedido(user_id, endereco_id, itens) {
-    const usuario = await pedidosRepository.buscaUsuario(user_id)
-    if(!usuario) throw new Error("Usuário não encontrado!")
     const endereco = await pedidosRepository.buscaEndereco(endereco_id)
     if(!endereco) throw new Error("Endereço não encontrado!")
 

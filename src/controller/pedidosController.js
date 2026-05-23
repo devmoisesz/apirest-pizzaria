@@ -2,7 +2,8 @@ import pedidosService from '../service/pedidosService.js'
 
 async function Criarpedido(req, res, next) {
     try {
-        const {user_id, endereco_id, itens} = req.body 
+        const user_id = req.usuario.id
+        const {endereco_id, itens} = req.body 
         const pedido = await pedidosService.Criarpedido(user_id, endereco_id, itens)
         res.status(201).json(pedido)
     } catch (error) {
