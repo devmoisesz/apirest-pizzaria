@@ -78,34 +78,34 @@ async function EnderecoDoUsuario(id) {
     return endereco
 }
 
-
 async function atualizarUsuario(id, dados) {
     const usuarioAtual = await usersRepository.buscarPorId(id)
-    
+
     if (!usuarioAtual) {
         const error = new Error('Usuário não encontrado')
         error.status = 404
         throw error
     }
 
+    const nomeAtual = dados.nome || usuarioAtual.nome
     const emailAtual = dados.email || usuarioAtual.email
-    
+
     const usuarioComEmail = await usersRepository.buscarPorEmail(emailAtual)
-    
-    if(usuarioComEmail && usuarioComEmail.id !== Number(id)) {
+
+    if (usuarioComEmail && usuarioComEmail.id !== Number(id)) {
         const error = new Error('Email já cadastrado!')
         error.status = 400
         throw error
     }
-    
-    let senhaHash
-    
+
+    let senhaHash = usuarioAtual.senha // mantém a atual se não vier nova senha
+
     if (dados.senha) {
         senhaHash = await bcrypt.hash(dados.senha, 10)
     }
-    
+
     return usersRepository.editaUser(id, {
-        nome: dados.nome,
+        nome: nomeAtual,
         email: emailAtual,
         senha: senhaHash
     })
