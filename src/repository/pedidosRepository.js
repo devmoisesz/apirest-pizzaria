@@ -1,4 +1,5 @@
 import pool from '../../database/db.js'
+import calcularTotalPedido from '../utils/calcularTotal.js'
 
 const buscaUsuario = async(id)=>{
     const {rows} = await pool.query(
@@ -56,7 +57,7 @@ async function Criarpedido(user_id, endereco_id, itens) {
             [pedido.id, item.product_id, item.quantity, item.unit_price]
        )
     }))
-    const total = itens.reduce((acc, item) => acc + (item.quantity * item.unit_price), 0)
+    const total = calcularTotalPedido(itens)
     const {rows: pedidoAtualizado} = await pool.query(
         'UPDATE pedidos SET total = $1 WHERE id = $2 RETURNING *',
         [total, pedido.id]
