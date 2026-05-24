@@ -2,17 +2,17 @@
 
 <p align="center">
   Uma API REST completa e profissional para gerenciamento de uma pizzaria — construída do zero com Node.js, Express e PostgreSQL.<br/>
-  Autenticação JWT, controle de acesso por papel, validação robusta de dados, arquitetura em camadas e muito mais.
+  Autenticação JWT, controle de acesso por papel, validação robusta de dados, arquitetura em camadas e testes automatizados.
 </p>
 
 <p align="center">
   <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=nodejs,express,postgres,js,git,postman,vscode" />
+    <img src="https://skillicons.dev/icons?i=nodejs,express,postgres,js,git,postman,vscode,jest" />
   </a>
 </p>
 
 <p align="center">
-  Node.js · Express · PostgreSQL · JavaScript · JWT · Bcrypt · Zod · dotenv · Git · Postman
+  Node.js · Express · PostgreSQL · JavaScript · JWT · Bcrypt · Zod · Jest · Supertest · dotenv
 </p>
 
 ---
@@ -21,9 +21,9 @@
 
 Este projeto é uma API REST completa para gerenciamento de uma pizzaria, desenvolvida com foco em boas práticas de desenvolvimento backend. A ideia foi construir uma API real e funcional, com todas as decisões arquiteturais e desafios que um desenvolvedor encontra no dia a dia.
 
-Ao longo do desenvolvimento foram implementados conceitos importantes: segurança com autenticação JWT, controle de acesso por papel (admin/cliente), validação robusta de dados com Zod, arquitetura em camadas escalável, middleware de tratamento de erros e gerenciamento completo de endereços para clientes.
+Ao longo do desenvolvimento foram implementados conceitos importantes: segurança com autenticação JWT, controle de acesso por papel (admin/cliente), validação robusta de dados com Zod, arquitetura em camadas escalável, middleware de tratamento de erros e **testes de integração com Jest**.
 
-O resultado é uma API profissional capaz de gerenciar completamente um negócio de pizzaria: usuários, cardápio de produtos/categorias, pedidos com histórico, endereços de entrega e controle de permissões por tipo de usuário.
+O resultado é uma API profissional capaz de gerenciar completamente um negócio de pizzaria: usuários, cardápio de produtos/categorias, pedidos com histórico, endereços de entrega, controle de permissões e testes automatizados para garantir qualidade do código.
 
 ---
 
@@ -40,15 +40,18 @@ Middleware  →   validação de dados, autenticação e controle de acesso
 ```
 
 ```
-├── server.js
+├── server.js           # Inicializa o servidor
+├── app.js              # Exporta a aplicação (separado para testes)
+├── jest.config.js      # Configuração do Jest
+├── package.json        # Dependências
 ├── database/
-│   └── db.js
+│   └── db.js           # Conexão com PostgreSQL
 └── src/
-    ├── route/
-    ├── controllers/
-    ├── service/
-    ├── repository/
-    └── middlewares/
+    ├── route/          # Definição de rotas
+    ├── controller/     # Lógica de requisição e resposta
+    ├── service/        # Regras de negócio
+    ├── repository/     # Queries SQL
+    └── middlewares/    # Validação, autenticação, autorização
 ```
 
 ---
@@ -74,6 +77,8 @@ npm install
 | `zod` | Validação de dados de entrada |
 | `jsonwebtoken` | Geração e verificação de tokens JWT |
 | `bcryptjs` | Hash seguro de senhas |
+| `jest` | Framework de testes |
+| `supertest` | Testes de rotas HTTP |
 
 **3. Configure o `.env`**
 ```env
@@ -88,6 +93,11 @@ node --watch server.js
 ```
 
 > Servidor rodando em `http://localhost:3001`
+
+**5. Execute os testes**
+```bash
+npm test
+```
 
 ---
 
@@ -263,7 +273,6 @@ O token carrega o `id` e o `papel` do usuário — `admin` ou `cliente`.
 
 ```json
 {
-  "user_id": 1,
   "endereco_id": 1,
   "itens": [
     { "product_id": 1, "quantity": 2 },
@@ -278,11 +287,11 @@ O token carrega o `id` e o `papel` do usuário — `admin` ou `cliente`.
 
 ```json
 {
-  "status": "em preparo"
+  "status": "em_preparacao"
 }
 ```
 
-**Status disponíveis:** `pendente` · `em preparo` · `entregue` · `cancelado`
+**Status disponíveis:** `pendente` · `em_preparacao` · `entregue` · `cancelado`
 </details>
 
 ---
@@ -318,53 +327,78 @@ O token carrega o `id` e o `papel` do usuário — `admin` ou `cliente`.
 
 ---
 
+## 🧪 Testes de Integração
+
+A API possui testes de integração com Jest e Supertest para garantir qualidade e confiabilidade do código.
+
+**Cenários testados:**
+- ✅ Segurança: API confia no ID do token, não do body
+- ✅ Validação: Email duplicado retorna erro apropriado
+- ✅ Autorização: Apenas admin consegue cadastrar categorias
+- ✅ HTTP Status Codes: Erros retornam status corretos (não apenas 500)
+
+**Executar testes:**
+```bash
+npm test
+```
+
+**Executar testes com cobertura:**
+```bash
+npm test -- --coverage
+```
+
+---
+
 ## ✨ Principais Funcionalidades Implementadas
 
 ### 🔒 Segurança
 - ✅ Autenticação JWT com tokens seguros
-- ✅ Hash de senhas com Bcrypt
+- ✅ Hash de senhas com Bcrypt (10 rounds)
 - ✅ Middleware de proteção de rotas
 - ✅ Verificação de senha para operações sensíveis (deletar conta)
 - ✅ Controle de acesso por papel (RBAC) — admin e cliente
+- ✅ Validação de propriedade de recursos (user_id vem do token, não do body)
 
 ### ✔️ Validação de Dados
 - ✅ Validação completa com Zod em todos os endpoints
 - ✅ Schemas específicos para cada entidade
-- ✅ Mensagens de erro descritivas
+- ✅ Mensagens de erro descritivas em português
 - ✅ Validação em múltiplas camadas (middleware + service)
+- ✅ Enum validado para status de pedidos
 
 ### 📋 Gerenciamento de Dados
 - ✅ CRUD completo para usuários, produtos, categorias, pedidos e endereços
 - ✅ Histórico de pedidos com filtro por status
 - ✅ Busca de produtos por nome
 - ✅ Múltiplos endereços por cliente
-- ✅ Sistema de status para pedidos (pendente, em preparo, entregue, cancelado)
+- ✅ Sistema de status para pedidos (pendente, em_preparacao, entregue, cancelado)
+- ✅ Validação de pedidos pendentes antes de deletar usuário
 
 ### 🏗️ Arquitetura
 - ✅ Arquitetura em camadas bem definida
-- ✅ Separação clara de responsabilidades
-- ✅ Middleware de tratamento de erros global
+- ✅ Separação clara de responsabilidades (Route → Controller → Service → Repository)
+- ✅ Middleware de tratamento de erros global com status HTTP apropriados
 - ✅ Código limpo e facilmente escalável
+- ✅ App e Server separados (melhor para testes)
 
-### 🗂️ Estrutura de Projeto
-- ✅ Routes organizadas por entidade
-- ✅ Controllers para lógica de requisição
-- ✅ Services para regras de negócio
-- ✅ Repositories para acesso ao banco
-- ✅ Middlewares para validação e autenticação
+### 🧪 Testes
+- ✅ Testes de integração com Jest
+- ✅ Testes de segurança (validação de autorização)
+- ✅ Testes de validação de dados
+- ✅ Uso de Supertest para testes de rotas HTTP
 
 ---
 
 ## 📊 Endpoints Resumo
 
-| Recurso | Endpoint | Métodos |
-|---------|----------|---------|
-| **Usuários** | `/usuarios` | POST, GET, PUT, DELETE |
-| **Login** | `/login` | POST |
-| **Produtos** | `/produtos` | GET (com busca), POST, PUT, DELETE |
-| **Categorias** | `/categoria` | GET, POST, PUT, DELETE |
-| **Pedidos** | `/pedidos` | GET, POST, PUT, DELETE (+ histórico) |
-| **Endereços** | `/enderecos` | GET, POST, PUT, DELETE |
+| Recurso | Endpoint | Métodos | Testes |
+|---------|----------|---------|--------|
+| **Usuários** | `/usuarios` | POST, GET, PUT, DELETE | ✅ |
+| **Login** | `/login` | POST | ✅ |
+| **Produtos** | `/produtos` | GET (com busca), POST, PUT, DELETE | - |
+| **Categorias** | `/categoria` | GET, POST, PUT, DELETE | ✅ |
+| **Pedidos** | `/pedidos` | GET, POST, PUT, DELETE (+ histórico) | ✅ |
+| **Endereços** | `/enderecos` | GET, POST, PUT, DELETE | - |
 
 **Total: 50+ rotas com controle de acesso**
 
@@ -379,7 +413,9 @@ O token carrega o `id` e o `papel` do usuário — `admin` ou `cliente`.
   "express": "^5.2.1",         // Framework web
   "jsonwebtoken": "^9.0.3",    // Autenticação JWT
   "pg": "^8.20.0",             // Driver PostgreSQL
-  "zod": "^4.4.3"              // Validação de dados
+  "zod": "^4.4.3",             // Validação de dados
+  "jest": "^30.4.2",           // Testes unitários e integração
+  "supertest": "^7.2.2"        // Testes de rotas HTTP
 }
 ```
 
@@ -387,17 +423,46 @@ O token carrega o `id` e o `papel` do usuário — `admin` ou `cliente`.
 
 ## 🎯 Status do Projeto
 
-✅ **FINALIZADO** — Todos os requisitos implementados e testados
+✅ **FUNCIONALIDADES COMPLETAS** — Todos os requisitos implementados, testados e refinados
 
 ### Funcionalidades Concluídas
-- ✅ Autenticação e autorização completa
-- ✅ Gerenciamento de usuários (cadastro, edição, deleção)
+- ✅ Autenticação e autorização completa com JWT
+- ✅ Gerenciamento de usuários (cadastro, edição, deleção com validações)
 - ✅ CRUD de produtos e categorias
-- ✅ Sistema de pedidos com histórico
+- ✅ Sistema de pedidos com histórico e status
 - ✅ Gerenciamento de endereços por cliente
 - ✅ Busca de produtos por nome
-- ✅ Middleware de erros global
-- ✅ Validação robusta de dados
+- ✅ Middleware de erros global com status HTTP corretos
+- ✅ Validação robusta de dados com Zod
 - ✅ Arquitetura em camadas escalável
+- ✅ Testes de integração com Jest
+- ✅ Separação de app.js e server.js (melhor para testes)
 - ✅ README completo com documentação
 
+### Melhorias Recentes (Commits)
+1. **Separação app/server** — Refatorado para permitir testes sem iniciar servidor
+2. **Testes de segurança** — API confia no ID do token, não do body
+3. **Validação de email** — Testa duplicate email rejection
+4. **Autorização de admin** — Testa que apenas admin cadastra categorias
+5. **Status HTTP corretos** — Retorna status apropriados em cada erro (400, 401, 403, 404, 409, 422, etc.)
+
+---
+
+## 📚 Recursos Úteis
+
+- [Express.js Documentation](https://expressjs.com/)
+- [JWT.io](https://jwt.io/)
+- [Zod Validation](https://zod.dev/)
+- [Jest Documentation](https://jestjs.io/)
+- [Supertest GitHub](https://github.com/visionmedia/supertest)
+- [PostgreSQL Documentation](https://www.postgresql.org/docs/)
+
+---
+
+## 📝 Licença
+
+Este projeto está sob a licença ISC.
+
+---
+
+**Desenvolvido com ❤️ por [devmoisesz](https://github.com/devmoisesz)**
