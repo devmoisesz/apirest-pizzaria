@@ -45,6 +45,7 @@ async function ListarProdutoFiltrado(nomeProdutoUrl) {
 const Listar = async()=>{
     const {rows} = await pool.query(`
         SELECT 
+            products.id,
             name_product, 
             price, 
             description, 
@@ -53,7 +54,7 @@ const Listar = async()=>{
             )) AS categoria
         FROM products
         JOIN categoria ON categoria.id = products.category_id
-        GROUP BY name_product, price, description, category_id
+        GROUP BY products.id, name_product, price, description, category_id
     `)
     return rows
 }
