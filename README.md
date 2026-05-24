@@ -448,21 +448,6 @@ npm test -- --coverage
 
 ---
 
-## 🚀 Próximos Passos (Melhorias Futuras)
-
-- [ ] Rate limiting em /login
-- [ ] Refresh tokens
-- [ ] Soft delete para auditoria
-- [ ] Logs centralizados (Winston)
-- [ ] CI/CD com GitHub Actions
-- [ ] Docker + docker-compose
-- [ ] Documentação com Swagger/OpenAPI
-- [ ] Testes e2e com Cypress
-- [ ] Cobertura de testes > 80%
-- [ ] Backup automático do BD
-
----
-
 ## 📚 Recursos Úteis
 
 - [Express.js Documentation](https://expressjs.com/)
