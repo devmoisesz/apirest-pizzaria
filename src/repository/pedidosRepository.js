@@ -220,7 +220,7 @@ async function DeletarPedido(id) {
     return rows[0]
 }
 
-async function statusPendente(id) {
+async function RetornarStatusAtual(id) {
     const {rows} = await pool.query(`
         SELECT pedidos.status FROM pedidos
         WHERE pedidos.id = $1    
@@ -233,5 +233,5 @@ export default {buscaUsuario, buscaEndereco, buscaProduto,
     BuscarPedidos, buscarId, pedidosPorUsuario, 
     buscarPedido, EditarPedido, BuscarPedidoPorUsuario, 
     ClienteCancelarPedido, DeletarPedido, 
-    statusPendente, PedidosDoUsuario
+    RetornarStatusAtual, PedidosDoUsuario
 }

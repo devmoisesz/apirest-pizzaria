@@ -1,4 +1,5 @@
 import pedidosRepository from '../repository/pedidosRepository.js'
+import validarTransicaoStatus from '../utils/validarTransicao.js'
 
 async function Criarpedido(user_id, endereco_id, itens) {
     const endereco = await pedidosRepository.buscaEndereco(endereco_id)
@@ -62,14 +63,20 @@ async function listarPorId(id) {
     return await pedidosRepository.buscarPedido(id)
 }
 
-async function EditarPedido(id, status) {
-    const idpedido = await pedidosRepository.buscarId(id)
-    if(!idpedido) {
+async function EditarPedido(id, novoStatus) {
+    const pedido = await pedidosRepository.buscarPedido(id)
+    if(!pedido) {
         const error = new Error('Pedido não encontrado!')
         error.status = 404
         throw error
     }
-    return await pedidosRepository.EditarPedido(id, status)
+    
+    if(!validarTransicaoStatus(pedido.status, novoStatus)){
+        const error = new Error('Transição de status inválida')
+        error.status = 400
+        throw error
+    }
+    return await pedidosRepository.EditarPedido(id, novoStatus)
 }
 
 async function ClienteCancelarPedido(id_user, idPedido) {
@@ -113,4 +120,7 @@ async function DeletarPedido(id) {
     return await pedidosRepository.DeletarPedido(id)
 }
 
-export default {Criarpedido, ListarHistorico, listarPedidoCliente, listarPedidos, listarPorId, EditarPedido, ClienteCancelarPedido, DeletarPedido}
+export default {Criarpedido, ListarHistorico, 
+    listarPedidoCliente, listarPedidos, 
+    listarPorId, EditarPedido, 
+    ClienteCancelarPedido, DeletarPedido}
