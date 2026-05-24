@@ -1,25 +1,41 @@
 import pedidosRepository from '../repository/pedidosRepository.js'
 import validarTransicaoStatus from '../utils/validarTransicao.js'
 
-async function Criarpedido(user_id, endereco_id, itens) {
-    const endereco = await pedidosRepository.buscaEndereco(endereco_id)
-    if(!endereco) {
-        const error = new Error('Endereço não encontrado!')
-        error.status = 404
-        throw error
+async function CriarPedido(user_id, endereco_id, itens) {
+
+    const endereco = await pedidosRepository.buscaEndereco(endereco_id);
+
+    if (!endereco) {
+        const error = new Error('Endereço não encontrado!');
+        error.status = 404;
+        throw error;
     }
 
-    await Promise.all(itens.map(async (item) => {
-            const produto = await pedidosRepository.buscaProduto(item.product_id)
-            if(!produto) {
-                const error = new Error('Produto não encontrado!')
-                error.status = 404
-                throw error
-            }
-            item.unit_price = produto.price //Adiciona o preço no item
-        }))
+    const itensComPreco = [];
 
-    return await pedidosRepository.Criarpedido(user_id, endereco_id, itens)
+    //Validar pedidos um por um
+    for (const item of itens) {
+        const produto = await pedidosRepository.buscaProduto(item.product_id);
+
+        if (!produto) {
+            const error = new Error(`Produto ${item.product_id} não encontrado!`);
+            error.status = 404;
+            throw error;
+        }
+
+        //puxa os itens do pedido com preço
+        itensComPreco.push({
+            product_id: item.product_id,
+            quantity: item.quantity,
+            unit_price: produto.price 
+        })
+    }
+
+    return await pedidosRepository.CriarPedido(
+        user_id,
+        endereco_id,
+        itensComPreco
+    )
 }
 
 async function ListarHistorico(idCliente) {
@@ -106,7 +122,7 @@ async function DeletarPedido(id) {
         error.status = 404
         throw error
     }
-    const statusCancelamento = await pedidosRepository.statusPendente(id)
+    const statusCancelamento = await pedidosRepository.RetornarStatusAtual(id)
     if(statusCancelamento.status === 'cancelado'){
         const error = new Error('Pedido já cancelado!')
         error.status = 409
@@ -120,7 +136,7 @@ async function DeletarPedido(id) {
     return await pedidosRepository.DeletarPedido(id)
 }
 
-export default {Criarpedido, ListarHistorico, 
+export default {CriarPedido, ListarHistorico, 
     listarPedidoCliente, listarPedidos, 
     listarPorId, EditarPedido, 
     ClienteCancelarPedido, DeletarPedido}

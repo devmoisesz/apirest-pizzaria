@@ -1,10 +1,10 @@
 import pedidosService from '../service/pedidosService.js'
 
-async function Criarpedido(req, res, next) {
+async function CriarPedido(req, res, next) {
     try {
         const user_id = req.usuario.id
         const {endereco_id, itens} = req.body 
-        const pedido = await pedidosService.Criarpedido(user_id, endereco_id, itens)
+        const pedido = await pedidosService.CriarPedido(user_id, endereco_id, itens)
         res.status(201).json(pedido)
     } catch (error) {
         next(error)
@@ -83,4 +83,4 @@ async function DeletarPedido(req, res, next) {
     }
 }
 
-export default {Criarpedido, listarPedidos, ListarHistorico, listarPedidoCliente, listarPedidosPorId, EditarPedido, ClienteCancelarPedido, DeletarPedido}
+export default {CriarPedido, listarPedidos, ListarHistorico, listarPedidoCliente, listarPedidosPorId, EditarPedido, ClienteCancelarPedido, DeletarPedido}

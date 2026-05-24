@@ -9,7 +9,7 @@ const router = Router()
 //Rota pra criar um pedido para o usuário autenticado
 router.post('/perfil', authMiddleware.autenticarToken, 
     pedidosMiddleware.ValidarCadastro, 
-    pedidosController.Criarpedido
+    pedidosController.CriarPedido
 ) 
 
 //Rota pra listar todos pedidos cadastrados(Apenas Admin tem acesso)

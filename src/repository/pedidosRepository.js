@@ -45,24 +45,48 @@ const buscaProduto = async (id)=>{
     return rows[0]
 }
 
-async function Criarpedido(user_id, endereco_id, itens) {
-    const {rows} = await pool.query(
-        'INSERT INTO pedidos (user_id, endereco_id) VALUES ($1, $2) RETURNING *',
-        [user_id, endereco_id]
-    )
-    const pedido = rows[0]
-    await Promise.all(itens.map(async (item) => {
-        await pool.query(
-            'INSERT INTO order_itens (order_id, product_id, quantity, unit_price) VALUES ($1, $2, $3, $4) RETURNING *',
-            [pedido.id, item.product_id, item.quantity, item.unit_price]
-       )
-    }))
-    const total = calcularTotalPedido(itens)
-    const {rows: pedidoAtualizado} = await pool.query(
-        'UPDATE pedidos SET total = $1 WHERE id = $2 RETURNING *',
-        [total, pedido.id]
-    )
-    return pedidoAtualizado[0]
+async function CriarPedido(user_id, endereco_id, itens) {
+    //conexão direta com o banco
+    const client = await pool.connect();
+
+    try {
+        //só sera salvo se não der nenhum erro
+        await client.query('BEGIN');
+
+        const { rows } = await client.query(
+            'INSERT INTO pedidos (user_id, endereco_id) VALUES ($1, $2) RETURNING *',
+            [user_id, endereco_id]
+        );
+
+        const pedido = rows[0];
+
+        for (const item of itens) {
+            await client.query(
+                'INSERT INTO order_itens (order_id, product_id, quantity, unit_price) VALUES ($1, $2, $3, $4)',
+                [pedido.id, item.product_id, item.quantity, item.unit_price]
+            );
+        }
+
+        const total = calcularTotalPedido(itens);
+
+        //Atualiza o pedido agora com o total calculado
+        const { rows: pedidoAtualizado } = await client.query(
+            'UPDATE pedidos SET total = $1 WHERE id = $2 RETURNING *',
+            [total, pedido.id]
+        );
+
+        //Confirma tudo no banco
+        await client.query('COMMIT');
+
+        return pedidoAtualizado[0];
+
+    } catch (error) {
+        //se algo falhar ROLLBACK desfaz pedido
+        await client.query('ROLLBACK');
+        throw error;
+    } finally { //finaliza conexão
+        client.release();
+    }
 }
 
 async function ListarHistorico(idCliente) {
@@ -229,7 +253,7 @@ async function RetornarStatusAtual(id) {
 }
 
 export default {buscaUsuario, buscaEndereco, buscaProduto, 
-    Criarpedido, ListarHistorico, listarPedidoCliente, 
+    CriarPedido, ListarHistorico, listarPedidoCliente, 
     BuscarPedidos, buscarId, pedidosPorUsuario, 
     buscarPedido, EditarPedido, BuscarPedidoPorUsuario, 
     ClienteCancelarPedido, DeletarPedido, 
