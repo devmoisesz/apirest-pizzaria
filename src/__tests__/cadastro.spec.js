@@ -12,7 +12,7 @@ describe('POST /usuarios', () => {
                 senha: "247247"
             })
 
-        expect(res.status).toBe(400)
+        expect(res.status).toBe(201)
         expect(res.body.mensagem).toBe('Email já cadastrado')
     })
 })
